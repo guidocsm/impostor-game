@@ -1,0 +1,25 @@
+.btn {
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 16px;
+  height: 42px;
+  min-width: 220px;
+}
+
+.main-btn {
+  background-color: #3DE0CF;
+  color: #080D17;
+  transition: background-color .3s ease-in-out, color .3s ease-in-out;
+}
+
+.main-btn:hover {
+  background-color: #080D17;
+  border: 1px solid #3DE0CF;
+  color: #3DE0CF;
+}
+
+.main-hover-btn {
+  background-color: #080D17;
+  border: 1px solid #3DE0CF;
+  color: #3DE0CF;
+}

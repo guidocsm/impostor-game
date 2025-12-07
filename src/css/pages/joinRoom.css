@@ -1,0 +1,21 @@
+.join-room-form {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 50px;
+}
+
+.join-room-cta {
+  margin-top: 40px;
+}
+
+.join-room-cta button {
+  width: 100%;
+}
+
+.room-error {
+  color: #DB0916;
+  text-align: center;
+  margin-top: 40px;
+  font-weight: 500;
+}

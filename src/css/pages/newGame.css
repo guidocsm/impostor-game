@@ -4,7 +4,7 @@
   gap: 30px;
 }
 
-.new-game .new-game-box {
+.new-game-box {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -78,4 +78,14 @@
 
 .selected-category {
   border: 1px solid #6EDFB2;
+}
+
+.new-game-box input {
+  background-color: #20283B;
+  border-radius: 12px;
+  font-size: 16px;
+  height: 45px;
+  color: #fff;
+  padding-left: 15px;
+  font-weight: 400;
 }

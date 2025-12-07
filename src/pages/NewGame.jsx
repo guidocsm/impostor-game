@@ -9,18 +9,26 @@ import { useConfigGame } from "../hooks/configGame/useConfigGame";
 const categoriesMock = [
   {
     id: 0,
-    name: 'Futbolistas',
+    value: 'Futbolistas',
     icon: '⚽️',
   },
   {
     id: 1,
-    name: 'Comidas',
+    value: 'Comidas',
     icon: '🍕',
   }
 ]
 
 export default function NewGame() {
-  const { configGame, addPlayer, removePlayer, setCategory, createNewGame } = useConfigGame()
+  const {
+    configGame,
+    categories,
+    addPlayer,
+    removePlayer,
+    setCategory,
+    setNewRoom,
+    onChangePlayerName
+  } = useConfigGame()
   const { crew, impostors, category: currentCategory } = configGame
 
   return (
@@ -48,7 +56,7 @@ export default function NewGame() {
         <div className="new-game-box">
           <span className="new-game-box-title">Categorías</span>
           <div className="new-game-box-categories">
-            {categoriesMock.map(category => (
+            {categories?.map(category => (
               <CategoryCard
                 key={category.id}
                 category={category}
@@ -58,9 +66,16 @@ export default function NewGame() {
             ))}
           </div>
         </div>
+        <div className="new-game-box">
+          <span>Tu nombre</span>
+          <input
+            type="text"
+            onChange={({ target }) => onChangePlayerName(target.value)}
+          />
+        </div>
         <Button
           text="Crear partida"
-          onClick={createNewGame}
+          onClick={() => setNewRoom(configGame)}
           disabled={configGame.category === null}
         />
       </section>

@@ -15,6 +15,7 @@ export default function Home() {
       <Button
         text="Unirme a una sala"
         type="main-hover"
+        onClick={() => navigate('/unirse')}
       />
     </section>
   )

@@ -1,11 +1,13 @@
+import { CATEGORIES } from "../../utils/constants";
+
 export function CategoryCard({ category = {}, currentCategory, setCategory }) {
   return (
     <div
-      className={`new-game-box-categories-item ${category.id === currentCategory ? 'selected-category' : ''}`}
-      onClick={() => setCategory(category.id)}
+      className={`new-game-box-categories-item ${category?.id === currentCategory?.id ? 'selected-category' : ''}`}
+      onClick={() => setCategory(category)}
     >
-      <span>{category.icon}</span>
-      <span>{category.name}</span>
+      <span>{CATEGORIES[category.name]?.icon}</span>
+      <span>{CATEGORIES[category.name]?.value}</span>
     </div>
   )
 }

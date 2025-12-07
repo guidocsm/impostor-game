@@ -8,7 +8,8 @@ export function Button({
 }) {
   const btnClassByType = {
     'main': 'main-btn',
-    'main-hover': 'main-hover-btn'
+    'main-hover': 'main-hover-btn',
+    'disabled-hover': 'disabled-hover-btn'
   }
 
   return (

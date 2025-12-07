@@ -23,3 +23,9 @@
   border: 1px solid #3DE0CF;
   color: #3DE0CF;
 }
+
+.disabled-hover-btn {
+  background-color: transparent;
+  border: 1px solid #B3B0C4;
+  color: #B3B0C4;
+}

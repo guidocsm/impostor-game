@@ -1,6 +1,15 @@
+@import url('../colors.css');
+
 .home-config {
   display: flex;
   flex-direction: column;
   gap: 10px;
   justify-content: center;
+}
+
+.home-config p {
+  text-align: center;
+  color: var(--color-dark-light);
+  margin-top: 20px;
+  margin-bottom: 30px;
 }

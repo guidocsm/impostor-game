@@ -1,7 +1,10 @@
+@import url('../colors.css');
+
 .room-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
 }
 
 .room-header-status {
@@ -38,7 +41,8 @@
 }
 
 .room-code-value {
-  background-color: #161D2F;
+  background-color: #fff;
+  box-shadow: var(--shadow-color);
   border-radius: 12px;
   display: flex;
   justify-content: space-between;
@@ -55,7 +59,8 @@
 }
 
 .room-category-value {
-  background-color: #161D2F;
+  background-color: #fff;
+  box-shadow: var(--shadow-color);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -87,7 +92,8 @@
 }
 
 .room-game-players {
-  background-color: #161D2F;
+  background-color: #fff;
+  box-shadow: var(--shadow-color);
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -97,13 +103,14 @@
 
 .room-game-players-counter {
   align-self: center;
-  color: #FFD449;
+  color: var(--color-gray);
   font-size: 24px;
   font-weight: 500;
 }
 
 .room-game-player-name {
-  background-color: #080D17;
+  background-color: #fff;
+  box-shadow: var(--shadow-color);
   border-radius: 12px;
   display: flex;
   justify-content: space-between;
@@ -120,5 +127,6 @@
 }
 
 .ready-message {
-  color: #6EDFB2;
+  color: var(--color-main);
+  font-weight: 500;
 }

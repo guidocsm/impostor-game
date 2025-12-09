@@ -1,23 +1,9 @@
-import { useState } from "react";
 import { Button } from "../components/ui/Button";
 import { Title } from "../components/ui/Title";
 import '../css/pages/newGame.css'
 import { PlayersSelection } from "../components/configGame/PlayersSelection";
 import { CategoryCard } from "../components/configGame/CategoryCard";
 import { useConfigGame } from "../hooks/configGame/useConfigGame";
-
-const categoriesMock = [
-  {
-    id: 0,
-    value: 'Futbolistas',
-    icon: '⚽️',
-  },
-  {
-    id: 1,
-    value: 'Comidas',
-    icon: '🍕',
-  }
-]
 
 export default function NewGame() {
   const {
@@ -29,6 +15,7 @@ export default function NewGame() {
     setNewRoom,
     onChangePlayerName
   } = useConfigGame()
+
   const { crew, impostors, category: currentCategory } = configGame
 
   return (

@@ -1,3 +1,5 @@
+@import url('../../colors.css');
+
 .btn {
   border-radius: 12px;
   font-weight: 500;
@@ -7,25 +9,25 @@
 }
 
 .main-btn {
-  background-color: #3DE0CF;
-  color: #080D17;
+  background-color: #6B46C1;
+  color: #fff;
   transition: background-color .3s ease-in-out, color .3s ease-in-out;
 }
 
 .main-btn:hover {
-  background-color: #080D17;
-  border: 1px solid #3DE0CF;
-  color: #3DE0CF;
+  background-color: transparent;
+  border: 1px solid var(--color-main);
+  color: var(--color-main);
 }
 
 .main-hover-btn {
-  background-color: #080D17;
-  border: 1px solid #3DE0CF;
-  color: #3DE0CF;
+  background-color: transparent;
+  border: 1px solid var(--color-main);
+  color: var(--color-main);
 }
 
 .disabled-hover-btn {
   background-color: transparent;
-  border: 1px solid #B3B0C4;
+  border: 1px solid var(--color-main);
   color: #B3B0C4;
 }

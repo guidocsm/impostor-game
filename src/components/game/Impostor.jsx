@@ -6,9 +6,9 @@ export function Impostor() {
     <section className="impostor-container">
       <div className="impostor-container-box">
         <div className="impostor-icon">
-          <NinjaIcon />
+          <NinjaIcon fill="#DC2928" />
         </div>
-        <span>Impostor</span>
+        <span>Eres el impostor</span>
         <p>Engaña a los demás jugadores y no te dejes atrapar</p>
       </div>
     </section>

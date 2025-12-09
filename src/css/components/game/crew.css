@@ -1,3 +1,5 @@
+@import url('../../colors.css');
+
 .crew-container {
   display: flex;
   flex-direction: column;
@@ -5,9 +7,9 @@
 }
 
 .crew-container-box {
-  background-color: #3DE0CF4D;
+  background-color: #6B46C14D;
   border-radius: 12px;
-  border: 1px solid #3DE0CF;
+  border: 1px solid var(--color-main);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,18 +18,19 @@
 }
 
 .crew-container-box span {
-  color: #3DE0CF;
+  color: var(--color-main);
   text-transform: uppercase;
   font-weight: 600;
   font-size: 24px;
 }
 
 .crew-container-box p {
-  color: #B3B0C4;
+  color: var(--color-gray);
+  text-align: center;
 }
 
 .crew-icon {
-  background-color: #3DE0CF4D;
+  background-color: #6B46C14D;
   border-radius: 50px;
   display: flex;
   justify-content: center;
@@ -37,7 +40,9 @@
 }
 
 .crew-container-secret-word {
-  background-color: #161D2F;
+  /* background-color: var(--color-gray); */
+  background-color: #fff;
+  box-shadow: var(--shadow-color);
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -48,11 +53,12 @@
 }
 
 .crew-container-secret-word-text {
-  color: #B3B0C4;
+  color: var(--color-gray);
+  text-align: center;
 }
 
 .crew-container-secret-word-value {
-  color: #3DE0CF;
+  color: var(--color-main);
   font-size: 18px;
   font-weight: 600;
 }

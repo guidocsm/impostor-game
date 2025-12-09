@@ -28,7 +28,6 @@ export function useRoomGame() {
     })()
   }, [roomId])
 
-  // Suscripción a cambios en players
   useEffect(() => {
     const channel = supabase
       .channel(`players-room-${roomId}`)
@@ -38,9 +37,8 @@ export function useRoomGame() {
           event: '*',
           schema: 'public',
           table: 'players',
-          // filter: `room_id=eq.${roomId}`
         },
-        async (payload) => {
+        async () => {
           const dataPlayers = await fetchPlayers(roomId)
           setPlayers(dataPlayers)
         }
@@ -54,7 +52,6 @@ export function useRoomGame() {
     }
   }, [roomId])
 
-  // Suscripción a cambios en room status
   useEffect(() => {
     const channel = supabase
       .channel(`room-status-${roomId}`)
@@ -64,7 +61,7 @@ export function useRoomGame() {
           event: 'UPDATE',
           schema: 'public',
           table: 'rooms',
-          filter: `id=eq.${roomId}` // IMPORTANTE: Mantener el filtro
+          filter: `id=eq.${roomId}`
         },
         (payload) => {
           console.log('Room status update:', payload);
@@ -89,7 +86,6 @@ export function useRoomGame() {
 
   const startGame = async () => {
     try {
-      // 1. Obtener categoría
       const { data: category, error: categoryError } = await supabase
         .from('categories')
         .select('options')
@@ -130,16 +126,13 @@ export function useRoomGame() {
         .from('rooms')
         .update({ status: 'started' })
         .eq('id', roomId)
-        .select(); // IMPORTANTE: Agregar .select() para verificar el update
+        .select();
 
       if (updateError) {
         console.error('Error updating room status:', updateError);
         return;
       }
 
-      console.log('Room updated successfully:', data);
-
-      // El host también navega (los demás lo harán vía Realtime)
       navigate(`/partida/${roomId}`);
 
     } catch (error) {

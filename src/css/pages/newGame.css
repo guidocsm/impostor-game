@@ -1,7 +1,11 @@
+@import url('../colors.css');
+
+
 .new-game {
   display: flex;
   flex-direction: column;
   gap: 30px;
+  color: #1C1C1E;
 }
 
 .new-game-box {
@@ -18,14 +22,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #161D2F;
+  background-color: #fff;
+  box-shadow:  var(--shadow-color);
   border-radius: 12px;
   padding: 10px 15px;
 }
 
 .new-game-box-counter div {
-  border: 1px solid #fff;
-  border-radius: 6px;
+  background-color: var(--color-main);
+  border-radius: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,14 +53,14 @@
 .new-game-box-categories-item {
   cursor: pointer;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 6px;
-  height: 77px;
-  background-color: #161D2F;
-  border: 1px solid #20283B;
+  background-color: #fff;
+  box-shadow:  var(--shadow-color);
   border-radius: 12px;
-  padding: 10px 15px;
+  padding: 20px 15px;
   transition: transform 0.3s ease-in-out;
+  border: 1px solid #fff;
 }
 
 .new-game-box-categories-item:hover {
@@ -63,25 +68,28 @@
 }
 
 .new-game-box-categories-item span {
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .remove-player, .add-player {
   cursor: pointer;
-  transition: color .3s ease-in-out, border-color .3s ease-in-out;
+  transition: background-color .3s ease-in-out, border-color .3s ease-in-out;
+  color: #fff;
+  border: 1px solid var(--color-main);
 }
 
 .remove-player:hover, .add-player:hover {
-  border: 1px solid #6EDFB2;
-  color: #6EDFB2;
+  border: 1px solid var(--color-main);
+  background-color: transparent;
+  color: var(--color-main)
 }
 
 .selected-category {
-  border: 1px solid #6EDFB2;
+  border: 1px solid var(--color-main);
 }
 
 .new-game-box input {
-  background-color: #20283B;
+  box-shadow:  var(--shadow-color);
   border-radius: 12px;
   font-size: 16px;
   height: 45px;

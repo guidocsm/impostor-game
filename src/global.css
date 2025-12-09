@@ -1,4 +1,5 @@
 /* ==== Inter Font Family ==== */
+@import url('./css/colors.css');
 
 @font-face {
   font-family: 'Inter';
@@ -35,9 +36,8 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #080D17;
+  background-color: #F7FAFC;
   padding: 50px 30px;
-  color: #fff;
   margin: 0;
 }
 
@@ -46,7 +46,7 @@ body {
   border: 0;
 }
 
-p {
+p, h1 {
   padding: 0;
   margin: 0;
 }
@@ -71,8 +71,7 @@ button {
 }
 
 .form-container input {
-  background-color: #161D2F;
-  border: 1px solid #20283B;
+  box-shadow: var(--shadow-color);
   border-radius: 12px;
   color: #fff;
   padding-left: 15px;

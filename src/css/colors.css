@@ -1,0 +1,8 @@
+:root {
+  --color-main: #6B46C1;
+  --color-dark: #1C1C1E;
+  --color-gray: #4A4F57;
+  --color-main-opacity: #6B46C14D;
+  --color-dark-light: rgba(0, 0, 0, .7);
+  --shadow-color: 0px 2px 8px 0px rgba(0, 0, 0, .2);
+}

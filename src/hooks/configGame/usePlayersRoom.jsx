@@ -24,7 +24,7 @@ export function usePlayersRoom(room) {
 
   const pendingPlayers = Array
     .from({ length: room?.totalPlayers - players?.length })
-    .map(x => ({ placeholder: 'Esperando jugador...' }))
+    .map(x => ({ placeholder: 'Esperando jugador' }))
   const isHosting = playerId === room?.hostPlayerId
 
   return {

@@ -8,7 +8,7 @@ export function Crew({ playerSession = null }) {
         <div className="crew-icon">
           <ShieldIcon />
         </div>
-        <span>Tripulante</span>
+        <span>Eres tripulante</span>
         <p>Encuentra al impostor entre los jugadores</p>
       </div>
       <div className="crew-container-secret-word">

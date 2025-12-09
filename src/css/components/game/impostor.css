@@ -23,7 +23,7 @@
 }
 
 .impostor-container-box p {
-  color: #B3B0C4;
+  color: var(--color-gray);
   text-align: center;
 }
 

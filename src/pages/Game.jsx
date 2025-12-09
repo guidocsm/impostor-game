@@ -39,7 +39,6 @@ export default function Game() {
 
   return (
     <div>
-      <Crew playerSession={{}} />
       {playerSession?.role === 'tripulante' && <Crew playerSession={playerSession} />}
       {playerSession?.role === 'impostor' && <Impostor playerSession={playerSession} />}
       <span

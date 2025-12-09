@@ -4,11 +4,12 @@ import { supabase } from "../services/supabaseClient";
 import { Crew } from "../components/game/Crew";
 import { Impostor } from "../components/game/Impostor";
 
+import '../css/pages/game.css';
+
 export default function Game() {
   const [playerSession, setPlayerSession] = useState(null)
 
   const navigate = useNavigate()
-
   const { roomId } = useParams()
 
   useEffect(() => {
@@ -38,8 +39,15 @@ export default function Game() {
 
   return (
     <div>
+      <Crew playerSession={{}} />
       {playerSession?.role === 'tripulante' && <Crew playerSession={playerSession} />}
       {playerSession?.role === 'impostor' && <Impostor playerSession={playerSession} />}
+      <span
+        className="back-home"
+        onClick={() => navigate('/')}
+      >
+        Volver al inicio
+      </span>
     </div>
   );
 }

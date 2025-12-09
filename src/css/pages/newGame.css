@@ -1,11 +1,10 @@
 @import url('../colors.css');
 
-
 .new-game {
   display: flex;
   flex-direction: column;
   gap: 30px;
-  color: #1C1C1E;
+  margin-top: 30px;
 }
 
 .new-game-box {
@@ -93,7 +92,6 @@
   border-radius: 12px;
   font-size: 16px;
   height: 45px;
-  color: #fff;
   padding-left: 15px;
   font-weight: 400;
 }

@@ -1,7 +1,21 @@
+import { useState } from "react";
 import { CopyIcon, CrownIcon } from "../../../../public/icons/Icons";
 import { CATEGORIES } from "../../../utils/constants";
 
 export function RoomInfo({ isHosting, room, pendingPlayers, players }) {
+  const [copiedText, setCopiedText] = useState('')
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(room?.code)
+      setCopiedText('¡Código copiado!')
+      setTimeout(() => {
+        setCopiedText('')
+      }, 5000)
+    } catch (err) {
+      console.error("Error al copiar: ", err)
+    }
+  };
   return (
     <>
       {isHosting &&
@@ -9,8 +23,9 @@ export function RoomInfo({ isHosting, room, pendingPlayers, players }) {
           <span className="room-code-text">Código de sala</span>
           <div className="room-code-value">
             <span>{room?.code}</span>
-            <CopyIcon />
+            <CopyIcon onClick={handleCopy} />
           </div>
+          <span className="room-code-success-copy">{copiedText}</span>
         </div>
       }
       <div className="room-game-field">

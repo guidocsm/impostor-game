@@ -130,3 +130,8 @@
   color: var(--color-main);
   font-weight: 500;
 }
+
+.room-code-success-copy {
+  color: #6EDFB2;
+  font-size: 14px;
+}

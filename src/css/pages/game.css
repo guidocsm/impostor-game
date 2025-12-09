@@ -1,0 +1,11 @@
+@import url('../colors.css');
+
+.back-home {
+  cursor: pointer;
+  text-decoration: underline;
+  display: block;
+  color: var(--color-main);
+  text-align: center;
+  text-underline-offset: 2px;
+  margin-top: 50px;
+}

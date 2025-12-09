@@ -1,0 +1,40 @@
+@import url('../../colors.css');
+
+.intructions-title {
+  font-family: 'Bangers', sans-serif;
+  text-align: center;
+  display: block;
+  color: var(--color-main);
+  font-size: 20px;
+}
+
+.instructions-list {
+  color: var(--color-gray);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.instruction {
+  color: var(--color-gray);
+}
+
+.intruction-title {
+  font-weight: 500;
+}
+
+.intructions-advice {
+  font-size: 14px;
+  color: var(--color-gray);
+  font-style: italic;
+}
+
+.close-intructions {
+  color: var(--color-main);
+  cursor: pointer;
+  text-decoration: underline;
+  display: block;
+  text-align: center;
+  text-underline-offset: 2px;
+  margin-top: 30px;
+}

@@ -23,6 +23,10 @@ export function useRoomGame() {
       const roomData = await fetchRoomById(roomId)
       setRoom(roomData)
 
+      if (roomData.status === 'started') {
+        navigate(`/partida/${roomId}`);
+      }
+
       const playersData = await fetchPlayers(roomId)
       setPlayers(playersData)
     })()

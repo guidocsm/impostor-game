@@ -1,15 +1,21 @@
 @import url('../colors.css');
 
-.home-config {
+.home-btn {
   display: flex;
   flex-direction: column;
   gap: 10px;
   justify-content: center;
 }
 
-.home-config p {
-  text-align: center;
-  color: var(--color-dark-light);
-  margin-top: 20px;
-  margin-bottom: 30px;
+.instructions {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 50px;
+}
+
+.instructions span {
+  color: var(--color-gray)
 }

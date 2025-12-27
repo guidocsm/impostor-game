@@ -52,8 +52,7 @@ export function useRoomGame() {
       if (playerExists) {
         setPlayers(playersData.map(player => ({ ...player, online: player.id === playerId })))
       } else {
-        console.log('!!', state?.playerAccessInfo?.code !== roomData?.code)
-        if (!state?.playerAccessInfo?.code || (state?.playerAccessInfo?.code !== roomData?.code)) {
+        if (!state?.playerAccessInfo?.code || (state?.playerAccessInfo?.code.toUpperCase() !== roomData?.code)) {
           navigate('/unirse', { state: { error: 'Código de acceso inválido.' } })
           return
         }

@@ -9,9 +9,7 @@ import { createGameSession } from "../../services/createGameSession"
 import { setRoomStatus } from "../../services/setRoomStatus"
 import { getRandomNumber } from "../../utils/methods"
 import { deletePlayer } from "../../services/deletePlayer"
-import { usePlayersListener } from "./usePlayersListener"
 import { supabase } from "../../services/supabaseClient"
-// import { useStartedGameListener } from "../listeners/useStartedGameListener"
 
 export function useRoomGame() {
   const [room, setRoom] = useState(null)
@@ -49,16 +47,16 @@ export function useRoomGame() {
       }
 
       if (playerExists) {
-        setPlayers(playersData.map(player => ({ ...player, online: player.id === playerId })))
+        setPlayers(playersData)
       } else {
         if (!state?.playerAccessInfo?.code || (state?.playerAccessInfo?.code.toUpperCase() !== roomData?.code)) {
           navigate('/unirse', { state: { error: 'Código de acceso inválido.' } })
           return
         }
 
-        const newPlayer = await createPlayer({ name: state?.playerAccessInfo?.name, id: roomData?.id })
+        await createPlayer({ name: state?.playerAccessInfo?.name, id: roomData?.id })
         playersData = await fetchPlayers(roomId)
-        setPlayers(playersData.map(player => ({ ...player, online: player.id === newPlayer.id })))
+        setPlayers(playersData)
       }
 
       if (roomData.status === 'started') {
@@ -69,8 +67,6 @@ export function useRoomGame() {
       setRoom(roomData)
     })()
   }, [roomId])
-
-  usePlayersListener(roomId, setPlayers)
 
   const startGame = async () => {
     try {

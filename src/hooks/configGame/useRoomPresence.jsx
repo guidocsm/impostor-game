@@ -14,90 +14,49 @@ export function useRoomPresence(isHosting, setPlayers) {
       config: { presence: { key: playerId } }
     });
 
-    const updateOnline = (state) => {
-      const presenceIds = Object.values(state).flat().map(p => p.playerId);
-      setPlayers(prev =>
-        prev.map(player => ({
-          ...player,
-          online: presenceIds.includes(player.id),
-        }))
-      );
-      return presenceIds;
+    // 🔹 Función para actualizar online/offline
+    const updateOnline = (presenceState, currentPlayers) => {
+      const presenceIds = Object.values(presenceState).flat().map(p => p.playerId);
+      return currentPlayers.map(player => ({
+        ...player,
+        online: presenceIds.includes(player.id),
+      }));
     };
 
-    const ensurePlayersSynced = async (state) => {
-      const presenceIds = Object.values(state).flat().map(p => p.playerId);
-      let missing = false;
-      setPlayers(prev => {
-        for (const pid of presenceIds) {
-          if (!prev.find(p => p.id === pid)) {
-            missing = true;
-            break;
-          }
-        }
-        return prev;
-      });
-      if (missing) {
-        try {
-          const fetched = await fetchPlayers(roomId);
-          setPlayers(fetched.map(p => ({ ...p, online: presenceIds.includes(p.id) })));
-        } catch (err) {
-          console.error('Error fetching players to sync presence:', err);
-        }
+    // 🔹 Fetch y sincronización completa de players
+    const syncPlayers = async () => {
+      try {
+        const presenceState = channel.presenceState();
+        const playersData = await fetchPlayers(roomId);
+
+        // Evitamos duplicados: usamos player.id
+        const uniquePlayers = playersData.filter(
+          (p, index, self) => index === self.findIndex(x => x.id === p.id)
+        );
+
+        setPlayers(updateOnline(presenceState, uniquePlayers));
+      } catch (err) {
+        console.error('Error syncing players:', err);
       }
     };
 
-    channel.on('presence', { event: 'sync' }, () => {
-      const state = channel.presenceState();
-      updateOnline(state);
-    });
+    // 🔹 Eventos Presence
+    channel.on('presence', { event: 'join' }, syncPlayers);
+    channel.on('presence', { event: 'leave' }, syncPlayers);
+    channel.on('presence', { event: 'sync' }, syncPlayers);
 
-    channel.on('presence', { event: 'join' }, async () => {
-      const state = channel.presenceState();
-      updateOnline(state);
-      await ensurePlayersSynced(state);
-    });
-
-    channel.on('presence', { event: 'leave' }, async () => {
-      const state = channel.presenceState();
-      updateOnline(state);
-
-      if (isHosting) {
-        try {
-          const currentPlayers = await fetchPlayers(roomId);
-          const onlineIds = Object.values(state).flat().map(p => p.playerId);
-          const toDelete = currentPlayers.filter(p => !onlineIds.includes(p.id));
-          for (const p of toDelete) {
-            await supabase.from('players').delete().eq('id', p.id);
-          }
-          const refreshed = await fetchPlayers(roomId);
-          setPlayers(refreshed.map(p => ({ ...p, online: onlineIds.includes(p.id) })));
-        } catch (err) {
-          console.error('Error handling leave cleanup:', err);
-        }
-      }
-    });
-
+    // 🔹 Subscribe y track
     channel.subscribe(async (status) => {
       if (status === 'SUBSCRIBED') {
         await channel.track({ playerId, userId: playerId });
-        const state = channel.presenceState();
-        updateOnline(state);
-        await ensurePlayersSynced(state);
+        await syncPlayers(); // fetch inicial al subscribirse
       }
     });
 
-    // 🔹 Detectar regreso a pestaña visible
+    // 🔹 Refetch automático al volver a la pestaña
     const handleVisibility = async () => {
       if (!document.hidden) {
-        try {
-          const playersData = await fetchPlayers(roomId);
-          const state = channel.presenceState();
-          const presenceIds = Object.values(state).flat().map(p => p.playerId);
-          setPlayers(playersData.map(p => ({ ...p, online: presenceIds.includes(p.id) })));
-        } catch (err) {
-          console.error('Error syncing players on visibility change:', err);
-        }
+        await syncPlayers();
       }
     };
     document.addEventListener('visibilitychange', handleVisibility);

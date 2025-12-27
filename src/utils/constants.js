@@ -1,7 +1,7 @@
 export const CATEGORIES = {
-  food: {
+  foods: {
     value: 'Comidas',
-    icon: '🍕'
+    icon: '🍴'
   },
   places: {
     value: 'Lugares',
@@ -9,7 +9,19 @@ export const CATEGORIES = {
   },
   footballers: {
     value: 'Futbolistas',
-    icon: '⚽️'
+    icon: '⚽️',
+  },
+  objects: {
+    value: 'Objetos',
+    icon: '🎁'
+  },
+  animals: {
+    value: 'Animales',
+    icon: '🐾'
+  },
+  fast_food: {
+    value: 'Comida rápida',
+    icon: '🍔'
   }
 }
 

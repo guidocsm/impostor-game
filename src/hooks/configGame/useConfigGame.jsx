@@ -21,7 +21,6 @@ export function useConfigGame() {
       const { data: categoriesList, error } = await supabase
         .from('categories')
         .select('name, id');
-
       setCategories(categoriesList)
     })()
   }, [])

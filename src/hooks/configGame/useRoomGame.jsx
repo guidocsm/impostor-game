@@ -16,7 +16,6 @@ import { supabase } from "../../services/supabaseClient"
 export function useRoomGame() {
   const [room, setRoom] = useState(null)
   const [players, setPlayers] = useState([])
-  // const [onlinePlayers, setOnlinePlayers] = useState([])
 
   const { roomId } = useParams()
   const { state } = useLocation()

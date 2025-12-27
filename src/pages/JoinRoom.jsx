@@ -2,6 +2,7 @@ import { Title } from "../components/ui/Title";
 import '../css/pages/joinRoom.css'
 import { JoinRoomForm } from "../components/configGame/room/JoinRoomForm";
 import { useJoinRoom } from "../hooks/configGame/useJoinRoom";
+import { useNavigate } from "react-router-dom";
 
 export default function JoinRoom() {
   const {
@@ -12,6 +13,9 @@ export default function JoinRoom() {
     setRoomError,
     navigateToRoom,
   } = useJoinRoom()
+
+  const navigate = useNavigate()
+
   return (
     <>
       <Title text="Unirse a una sala" />
@@ -23,6 +27,7 @@ export default function JoinRoom() {
         setRoomError={setRoomError}
         navigateToRoom={navigateToRoom}
       />
+      <span onClick={() => navigate('/')} className="join-room-back">Volver</span>
     </>
   )
 } 

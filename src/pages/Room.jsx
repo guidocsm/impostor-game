@@ -1,33 +1,19 @@
-import { useEffect } from "react";
-import { CopyIcon, CrownIcon, DotIcon } from "../../public/icons/Icons";
+import { DotIcon } from "../../public/icons/Icons";
 import { Title } from "../components/ui/Title";
-import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import { useRoomGame } from "../hooks/configGame/useRoomGame";
-import '../css/pages/room.css'
-import { CATEGORIES } from "../utils/constants";
 import { RoomInfo } from "../components/configGame/room/RoomInfo";
+import '../css/pages/room.css'
 
 export default function Room() {
-  const playerId = JSON.parse(localStorage.getItem('playerId'))
-
   const {
     room,
     players,
     pendingPlayers,
     isHosting,
     startGame,
-    deletePlayer
+    deletePlayerAndUpdatePlayers
   } = useRoomGame()
-
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (!playerId) {
-      navigate('/')
-      return
-    }
-  }, [])
 
   return (
     <>
@@ -65,7 +51,7 @@ export default function Room() {
         <Button
           text="Salir de la sala"
           type="main-hover"
-          onClick={deletePlayer}
+          onClick={deletePlayerAndUpdatePlayers}
         />
       </div>
     </>

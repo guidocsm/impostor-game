@@ -1,3 +1,5 @@
+@import url('../colors.css');
+
 .join-room-form {
   display: flex;
   flex-direction: column;
@@ -18,4 +20,14 @@
   text-align: center;
   margin-top: 40px;
   font-weight: 500;
+}
+
+.join-room-back {
+  color: var(--color-main);
+  cursor: pointer;
+  display: block;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-align: center;
+  margin-top: -20px;
 }

@@ -1,148 +1,106 @@
 import { useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
-import { supabase } from "../../services/supabaseClient"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { fetchRoomById } from "../../services/fetch/fetchRoomById"
-import { usePlayersRoom } from "./usePlayersRoom"
 import { fetchPlayers } from "../../services/fetch/fetchPlayers"
+import { createPlayer } from "../../services/createPlayer"
+import { useRoomPresence } from "./useRoomPresence"
+import { getCategory } from "../../services/getCategory"
+import { createGameSession } from "../../services/createGameSession"
+import { setRoomStatus } from "../../services/setRoomStatus"
+import { getRandomNumber } from "../../utils/methods"
+import { deletePlayer } from "../../services/deletePlayer"
+// import { useStartedGameListener } from "../listeners/useStartedGameListener"
 
 export function useRoomGame() {
   const [room, setRoom] = useState(null)
+  const [players, setPlayers] = useState([]);
+
   const { roomId } = useParams()
+  const { state } = useLocation()
   const navigate = useNavigate()
 
-  const {
-    players,
-    setPlayers,
-    pendingPlayers,
-    isHosting,
-    deletePlayer
-  } = usePlayersRoom(room)
+  const playerId = JSON.parse(localStorage.getItem('playerId'))
+  console.log('player id', playerId === room?.hostPlayerId)
+  console.log('room?.hostPlayerId', room?.hostPlayerId)
+  const isHosting = playerId === room?.hostPlayerId
+
+  useRoomPresence(isHosting, setPlayers)
+  // useStartedGameListener()
 
   useEffect(() => {
     (async () => {
-      const roomData = await fetchRoomById(roomId)
-      setRoom(roomData)
+      const { room: roomData, error } = await fetchRoomById(roomId)
 
-      if (roomData.status === 'started') {
-        navigate(`/partida/${roomId}`);
+      if (error) {
+        navigate('/unirse', {
+          state: { error: 'Ha ocurrido un error. Inténtalo de nuevo' }
+        })
       }
 
       const playersData = await fetchPlayers(roomId)
+      const userExists = playersData.some(player => player?.id === playerId)
+
+      if (playersData?.length === roomData?.totalPlayers && !userExists) {
+        navigate('/unirse', {
+          state: { error: 'Lo sentimos, la sala ya está llena.' }
+        })
+        return
+      }
+
+      if (!userExists) {
+        await createPlayer({ name: state?.name, id: roomData?.id })
+      }
+
+      if (roomData.status === 'started') {
+        navigate(`/partida/${roomId}`);
+        return
+      }
+
+      setRoom(roomData)
       setPlayers(playersData)
     })()
   }, [roomId])
 
-  useEffect(() => {
-    const channel = supabase
-      .channel(`players-room-${roomId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'players',
-        },
-        async () => {
-          const dataPlayers = await fetchPlayers(roomId)
-          setPlayers(dataPlayers)
-        }
-      )
-      .subscribe((status) => {
-        console.log('Players subscription status:', status);
-      })
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [roomId])
-
-  useEffect(() => {
-    const channel = supabase
-      .channel(`room-status-${roomId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'rooms',
-          filter: `id=eq.${roomId}`
-        },
-        (payload) => {
-          console.log('Room status update:', payload);
-
-          if (payload.new?.status === 'started') {
-            console.log('Redirecting to game...');
-            navigate(`/partida/${roomId}`);
-          }
-        }
-      )
-      .subscribe((status) => {
-        console.log('Room subscription status:', status);
-        if (status === 'SUBSCRIBED') {
-          console.log('Successfully subscribed to room updates');
-        }
-      })
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [roomId, navigate])
-
   const startGame = async () => {
     try {
-      const { data: category, error: categoryError } = await supabase
-        .from('categories')
-        .select('options')
-        .eq('id', room?.category?.id)
-        .single();
+      const category = await getCategory(room?.category?.id)
+      const randomPlayerIndex = getRandomNumber(players.length)
+      const randomCategoryIndex = getRandomNumber(category.options.length)
 
-      if (categoryError) {
-        console.error('Error fetching category:', categoryError);
-        return;
-      }
-
-      // 2. Seleccionar impostor y palabra secreta
-      const impostorIndex = Math.floor(Math.random() * players.length)
-      const secretWordIndex = Math.floor(Math.random() * category.options.length)
-      const secretWord = category.options[secretWordIndex]
-
-      // 3. Crear sesiones de juego
-      const inserts = players.map((player, i) => ({
+      const gameSessionList = players.map((player, playerIndex) => ({
         player_id: player.id,
         player_name: player.name,
-        role: i === impostorIndex ? 'impostor' : 'tripulante',
-        word: secretWord,
+        role: playerIndex === randomPlayerIndex ? 'impostor' : 'tripulante',
+        word: category.options[randomCategoryIndex],
         is_host: player.id === players[0].id,
         room_id: roomId,
       }))
 
-      const { error: insertError } = await supabase
-        .from('game_sessions')
-        .insert(inserts)
-
-      if (insertError) {
-        console.error('Error creating game sessions:', insertError);
-        return;
-      }
-
-      // 4. Actualizar estado de la sala
-      const { data, error: updateError } = await supabase
-        .from('rooms')
-        .update({ status: 'started' })
-        .eq('id', roomId)
-        .select();
-
-      if (updateError) {
-        console.error('Error updating room status:', updateError);
-        return;
-      }
+      await createGameSession(gameSessionList)
+      await setRoomStatus('started')
 
       navigate(`/partida/${roomId}`);
 
     } catch (error) {
-      console.error('Error starting game:', error);
+      console.error('Error starting game:', error)
     }
   }
+
+  const deletePlayerAndUpdatePlayers = async () => {
+    try {
+      await deletePlayer()
+      localStorage.removeItem('playerId')
+      const newPlayers = await fetchPlayers(roomId)
+      setPlayers(newPlayers)
+      navigate('/')
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  const pendingPlayers = Array
+    .from({ length: room?.totalPlayers - players?.length })
+    .map(x => ({ placeholder: 'Esperando jugador' }))
 
   return {
     room,
@@ -150,6 +108,6 @@ export function useRoomGame() {
     pendingPlayers,
     isHosting,
     startGame,
-    deletePlayer
+    deletePlayerAndUpdatePlayers,
   }
 }

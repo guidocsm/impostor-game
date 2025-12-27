@@ -1,7 +1,5 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { createPlayer } from "../../services/createPlayer"
-import { fetchPlayers } from "../../services/fetch/fetchPlayers"
+import { useEffect, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 import { fetchRoomByCode } from "../../services/fetch/fetchRoomByCode"
 
 export function useJoinRoom() {
@@ -13,6 +11,14 @@ export function useJoinRoom() {
   const [roomError, setRoomError] = useState('')
 
   const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location?.state?.error) {
+      setRoomError(location?.state?.error)
+      navigate(location.pathname, { replace: true })
+    }
+  }, [location])
 
   const onChangeCode = (code) => {
     setJoinRoomForm(prevForm => ({ ...prevForm, code }))
@@ -30,20 +36,12 @@ export function useJoinRoom() {
 
     setRoomError('')
     const room = await fetchRoomByCode(joinRoomForm.code)
-    const players = await fetchPlayers(room?.id)
 
-    if (room?.totalPlayers === players?.length) {
-      setRoomError('Lo sentimos, la sala ya está llena.')
-      return
-    }
-
-    const payload = {
-      roomId: room?.id,
-      name: joinRoomForm.name,
-    }
-
-    await createPlayer(payload)
-    navigate(`/sala/${room?.id}`)
+    navigate(`/sala/${room?.id}`, {
+      state: {
+        name: joinRoomForm?.name
+      }
+    })
   }
 
   return {

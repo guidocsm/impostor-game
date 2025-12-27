@@ -47,7 +47,6 @@ export function RoomInfo({ isHosting, room, pendingPlayers, players }) {
           {players?.map((player, i) => (
             <div className="room-game-player-name" key={player.id}>
               <span>{player?.name || `Jugador ${i + 1}`}</span>
-              {JSON.stringify(player.id === room?.hostPlayerId)}
               {player.id === room?.hostPlayerId && <CrownIcon />}
             </div>
           ))}

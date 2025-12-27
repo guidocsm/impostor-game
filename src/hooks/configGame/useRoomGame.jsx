@@ -9,35 +9,36 @@ import { createGameSession } from "../../services/createGameSession"
 import { setRoomStatus } from "../../services/setRoomStatus"
 import { getRandomNumber } from "../../utils/methods"
 import { deletePlayer } from "../../services/deletePlayer"
+import { usePlayersListener } from "./usePlayersListener"
+import { supabase } from "../../services/supabaseClient"
 // import { useStartedGameListener } from "../listeners/useStartedGameListener"
 
 export function useRoomGame() {
   const [room, setRoom] = useState(null)
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState([])
+  // const [onlinePlayers, setOnlinePlayers] = useState([])
 
   const { roomId } = useParams()
   const { state } = useLocation()
   const navigate = useNavigate()
 
   const playerId = JSON.parse(localStorage.getItem('playerId'))
-  console.log('player id', playerId === room?.hostPlayerId)
-  console.log('room?.hostPlayerId', room?.hostPlayerId)
   const isHosting = playerId === room?.hostPlayerId
 
   useRoomPresence(isHosting, setPlayers)
-  // useStartedGameListener()
 
   useEffect(() => {
     (async () => {
       const { room: roomData, error } = await fetchRoomById(roomId)
-
       if (error) {
         navigate('/unirse', {
           state: { error: 'Ha ocurrido un error. Inténtalo de nuevo' }
         })
       }
 
-      const playersData = await fetchPlayers(roomId)
+      await supabase.rpc('set_config', { key: 'request.room_id', value: roomId })
+
+      let playersData = await fetchPlayers(roomId)
       const userExists = playersData.some(player => player?.id === playerId)
 
       if (playersData?.length === roomData?.totalPlayers && !userExists) {
@@ -49,6 +50,7 @@ export function useRoomGame() {
 
       if (!userExists) {
         await createPlayer({ name: state?.name, id: roomData?.id })
+        playersData = await fetchPlayers(roomId)
       }
 
       if (roomData.status === 'started') {
@@ -57,9 +59,11 @@ export function useRoomGame() {
       }
 
       setRoom(roomData)
-      setPlayers(playersData)
+      setPlayers(playersData.map(player => ({ ...player, online: true })))
     })()
   }, [roomId])
+
+  usePlayersListener(roomId, setPlayers)
 
   const startGame = async () => {
     try {

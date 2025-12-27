@@ -35,7 +35,7 @@ export function useJoinRoom() {
     }
 
     setRoomError('')
-    const room = await fetchRoomByCode(joinRoomForm.code)
+    const room = await fetchRoomByCode(joinRoomForm.code.toUpperCase())
 
     navigate(`/sala/${room?.id}`, {
       state: {

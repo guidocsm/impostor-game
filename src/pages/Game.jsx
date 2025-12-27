@@ -5,6 +5,7 @@ import { Crew } from "../components/game/Crew";
 import { Impostor } from "../components/game/Impostor";
 
 import '../css/pages/game.css';
+import { ROLES } from "../utils/constants";
 
 export default function Game() {
   const [playerSession, setPlayerSession] = useState(null)
@@ -13,7 +14,7 @@ export default function Game() {
   const { roomId } = useParams()
 
   useEffect(() => {
-    const fetchPlayerSession = async () => {
+    (async () => {
       const playerId = JSON.parse(localStorage.getItem('playerId'))
       if (!playerId) {
         navigate('/')
@@ -32,15 +33,13 @@ export default function Game() {
       }
 
       setPlayerSession(data)
-    };
-
-    fetchPlayerSession()
+    })()
   }, [roomId])
 
   return (
     <div>
-      {playerSession?.role === 'tripulante' && <Crew playerSession={playerSession} />}
-      {playerSession?.role === 'impostor' && <Impostor playerSession={playerSession} />}
+      {playerSession?.role === ROLES.CREW && <Crew playerSession={playerSession} />}
+      {playerSession?.role === ROLES.IMPOSTOR && <Impostor playerSession={playerSession} />}
       <span
         className="back-home"
         onClick={() => navigate('/')}

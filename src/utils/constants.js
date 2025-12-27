@@ -12,3 +12,8 @@ export const CATEGORIES = {
     icon: '⚽️'
   }
 }
+
+export const ROLES = {
+  IMPOSTOR: 'impostor',
+  CREW: 'tripulante'
+}

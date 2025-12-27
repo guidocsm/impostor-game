@@ -18,7 +18,7 @@ export const createPlayer = async (payload) => {
     }])
 
     localStorage.setItem('playerId', JSON.stringify(playerId))
-    return response
+    return user
   } catch (error) {
     return error
   }

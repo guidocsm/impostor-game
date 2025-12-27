@@ -39,7 +39,7 @@ export function useJoinRoom() {
 
     navigate(`/sala/${room?.id}`, {
       state: {
-        name: joinRoomForm?.name
+        playerAccessInfo: joinRoomForm
       }
     })
   }

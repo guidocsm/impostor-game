@@ -1,6 +1,6 @@
 import { Button } from "../../ui/Button";
 
-export function JoinRoomForm({ roomError, onChangeCode, onChangeName, setRoomError, navigateToRoom }) {
+export function JoinRoomForm({ onChangeCode, onChangeName, setRoomError, navigateToRoom }) {
   return (
     <>
       <form className="join-room-form">
@@ -27,7 +27,6 @@ export function JoinRoomForm({ roomError, onChangeCode, onChangeName, setRoomErr
           onClick={navigateToRoom}
         />
       </div>
-      <p className="room-error">{roomError}</p>
     </>
   )
 }

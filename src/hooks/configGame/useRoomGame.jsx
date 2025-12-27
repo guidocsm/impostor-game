@@ -20,6 +20,7 @@ export function useRoomGame() {
 
   const { roomId } = useParams()
   const { state } = useLocation()
+
   const navigate = useNavigate()
 
   const playerId = JSON.parse(localStorage.getItem('playerId'))
@@ -30,7 +31,7 @@ export function useRoomGame() {
   useEffect(() => {
     (async () => {
       const { room: roomData, error } = await fetchRoomById(roomId)
-      if (error) {
+      if (error || !roomData) {
         navigate('/unirse', {
           state: { error: 'Ha ocurrido un error. Inténtalo de nuevo' }
         })
@@ -39,27 +40,35 @@ export function useRoomGame() {
       await supabase.rpc('set_config', { key: 'request.room_id', value: roomId })
 
       let playersData = await fetchPlayers(roomId)
-      const userExists = playersData.some(player => player?.id === playerId)
+      const playerExists = playersData.some(player => player?.id === playerId)
 
-      if (playersData?.length === roomData?.totalPlayers && !userExists) {
+      if (playersData?.length === roomData?.totalPlayers && !playerExists) {
         navigate('/unirse', {
           state: { error: 'Lo sentimos, la sala ya está llena.' }
         })
         return
       }
 
-      if (!userExists) {
-        await createPlayer({ name: state?.name, id: roomData?.id })
+      if (playerExists) {
+        setPlayers(playersData.map(player => ({ ...player, online: player.id === playerId })))
+      } else {
+        console.log('!!', state?.playerAccessInfo?.code !== roomData?.code)
+        if (!state?.playerAccessInfo?.code || (state?.playerAccessInfo?.code !== roomData?.code)) {
+          navigate('/unirse', { state: { error: 'Código de acceso inválido.' } })
+          return
+        }
+
+        const newPlayer = await createPlayer({ name: state?.playerAccessInfo?.name, id: roomData?.id })
         playersData = await fetchPlayers(roomId)
+        setPlayers(playersData.map(player => ({ ...player, online: player.id === newPlayer.id })))
       }
 
       if (roomData.status === 'started') {
-        navigate(`/partida/${roomId}`);
+        navigate(`/partida/${roomId}`)
         return
       }
 
       setRoom(roomData)
-      setPlayers(playersData.map(player => ({ ...player, online: true })))
     })()
   }, [roomId])
 

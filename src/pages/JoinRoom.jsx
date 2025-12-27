@@ -28,6 +28,7 @@ export default function JoinRoom() {
         navigateToRoom={navigateToRoom}
       />
       <span onClick={() => navigate('/')} className="join-room-back">Volver</span>
+      <p className="room-error">{roomError}</p>
     </>
   )
 } 

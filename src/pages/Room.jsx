@@ -14,7 +14,7 @@ export default function Room() {
     startGame,
     deletePlayerAndUpdatePlayers
   } = useRoomGame()
-
+  console.log('room', room)
   return (
     <>
       <div className="room-header">
@@ -36,7 +36,7 @@ export default function Room() {
             onClick={startGame}
           />
         )}
-        {!isHosting && pendingPlayers?.length === 0 && (
+        {!isHosting && players.length === room?.totalPlayers && (
           <p className="ready-message">Todo listo. Esperando que el anfitrión empiece la partida.</p>
         )}
         <Button

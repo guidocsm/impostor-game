@@ -3,7 +3,6 @@ import '../../css/components/game/crew.css'
 import { CATEGORIES } from '../../utils/constants'
 
 export function Crew({ playerSession = null }) {
-  console.log('player session', playerSession)
   return (
     <section className="crew-container">
       <span className="crew-container-category">{CATEGORIES[playerSession?.category]?.value || ''}</span>

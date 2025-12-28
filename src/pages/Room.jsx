@@ -14,7 +14,7 @@ export default function Room() {
     startGame,
     deletePlayerAndUpdatePlayers
   } = useRoomGame()
-  console.log('room', room)
+
   return (
     <>
       <div className="room-header">

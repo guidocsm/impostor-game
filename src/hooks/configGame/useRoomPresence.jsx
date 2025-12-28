@@ -8,7 +8,14 @@ export function useRoomPresence(isHosting, setPlayers) {
   const playerId = JSON.parse(localStorage.getItem('playerId'));
 
   useEffect(() => {
-    if (!roomId || !playerId) return;
+    if (!roomId || !playerId) return
+
+    (async () => {
+      await supabase.rpc('set_config', {
+        key: 'request.headers',
+        value: JSON.stringify({ 'x-player-id': playerId })
+      })
+    })()
 
     const channel = supabase.channel(`room:${roomId}`, {
       config: { presence: { key: playerId } }

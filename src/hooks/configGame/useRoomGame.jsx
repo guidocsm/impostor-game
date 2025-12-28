@@ -10,6 +10,7 @@ import { setRoomStatus } from "../../services/setRoomStatus"
 import { getRandomNumber } from "../../utils/methods"
 import { deletePlayer } from "../../services/deletePlayer"
 import { supabase } from "../../services/supabaseClient"
+import { useRoomListener } from "./useRoomListener"
 
 export function useRoomGame() {
   const [room, setRoom] = useState(null)
@@ -24,6 +25,7 @@ export function useRoomGame() {
   const isHosting = playerId === room?.hostPlayerId
 
   useRoomPresence(isHosting, setPlayers)
+  useRoomListener(roomId, setRoom)
 
   useEffect(() => {
     (async () => {
@@ -68,9 +70,15 @@ export function useRoomGame() {
     })()
   }, [roomId])
 
+  useEffect(() => {
+    if (room?.status === 'started') {
+      navigate(`/partida/${roomId}`);
+    }
+  }, [room, roomId, navigate]);
+
   const startGame = async () => {
     try {
-      const category = await getCategory(room?.category?.id)
+      const category = await getCategory({ categoryId: room?.category?.id })
       const randomPlayerIndex = getRandomNumber(players.length)
       const randomCategoryIndex = getRandomNumber(category.options.length)
 

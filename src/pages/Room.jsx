@@ -21,15 +21,6 @@ export default function Room() {
         <Title
           text="Lobby"
         />
-        <div
-          style={{ backgroundColor: pendingPlayers?.length > 0 ? '#4A4F574D' : '#6EDFB24D' }}
-          className={`room-header-status ${pendingPlayers?.length > 0 ? 'pending-status' : ''}`}
-        >
-          <DotIcon fill={pendingPlayers?.length > 0 ? '#4A4F57' : '#6EDFB2'} />
-          <span style={{ color: pendingPlayers?.length > 0 ? '#4A4F57' : '#6EDFB2' }}>
-            {pendingPlayers?.length > 0 ? 'Esperando jugadores' : 'Sala completa'}
-          </span>
-        </div>
       </div>
       <RoomInfo
         room={room}

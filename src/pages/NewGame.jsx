@@ -4,7 +4,7 @@ import '../css/pages/newGame.css'
 import { PlayersSelection } from "../components/configGame/PlayersSelection";
 import { CategoryCard } from "../components/configGame/CategoryCard";
 import { useConfigGame } from "../hooks/configGame/useConfigGame";
-import { ROLES } from "../utils/constants";
+import { IMPOSTORS, PLAYERS } from "../utils/constants";
 
 export default function NewGame() {
   const {
@@ -17,7 +17,7 @@ export default function NewGame() {
     onChangePlayerName
   } = useConfigGame()
 
-  const { crew, impostor, category: currentCategory } = configGame
+  const { players, impostors, category: currentCategory } = configGame
 
   return (
     <>
@@ -27,17 +27,17 @@ export default function NewGame() {
       <section className="new-game">
         <PlayersSelection
           label="Jugadores"
-          players={crew}
-          className={crew === 3 ? 'disabled' : ''}
-          sectionKey={ROLES.CREW}
+          players={players}
+          className={players === 3 ? 'disabled' : ''}
+          sectionKey={PLAYERS}
           addPlayer={addPlayer}
           removePlayer={removePlayer}
         />
         <PlayersSelection
           label="Impostores"
-          players={impostor}
-          className={impostor === 1 ? 'disabled' : ''}
-          sectionKey={ROLES.IMPOSTOR}
+          players={impostors}
+          className={impostors === 1 ? 'disabled' : ''}
+          sectionKey={IMPOSTORS}
           addPlayer={addPlayer}
           removePlayer={removePlayer}
         />

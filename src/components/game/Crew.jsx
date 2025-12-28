@@ -1,20 +1,14 @@
 import { ShieldIcon } from '../../../public/icons/Icons'
 import '../../css/components/game/crew.css'
+import { CATEGORIES } from '../../utils/constants'
 
 export function Crew({ playerSession = null }) {
+  console.log('player session', playerSession)
   return (
     <section className="crew-container">
-      <div className="crew-container-box">
-        <div className="crew-icon">
-          <ShieldIcon />
-        </div>
-        <span>Eres tripulante</span>
-        <p>Encuentra al impostor entre los jugadores</p>
-      </div>
-      <div className="crew-container-secret-word">
-        <span className="crew-container-secret-word-text">La palabra secreta es:</span>
-        <span className="crew-container-secret-word-value">{playerSession?.word}</span>
-      </div>
+      <span className="crew-container-category">{CATEGORIES[playerSession?.category]?.value || ''}</span>
+      <span className="crew-container-secret-word">{playerSession?.word}</span>
+      <p className="crew-container-description">Da pistas sobre esta palabra. ¡No seas obvio!</p>
     </section>
   )
 }

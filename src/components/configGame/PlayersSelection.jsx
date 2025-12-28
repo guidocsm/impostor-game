@@ -1,5 +1,4 @@
 import { AddIcon, RemoveIcon } from "../../../public/icons/Icons";
-import { ROLES } from "../../utils/constants";
 
 export function PlayersSelection({
   label = '',

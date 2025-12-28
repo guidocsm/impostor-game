@@ -52,8 +52,8 @@ export function RoomInfo({ isHosting, room, pendingPlayers, players }) {
           ))}
           {pendingPlayers?.length > 0 && pendingPlayers.map((pendingPlayer, i) => (
             <span
-              className="room-game-player-name"
-              style={{ opacity: .5 }}
+              className="room-game-player-name pending-status"
+              // style={{ opacity: .5 }}
               key={i}
             >
               {pendingPlayer.placeholder}

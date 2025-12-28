@@ -25,7 +25,5 @@ export const CATEGORIES = {
   }
 }
 
-export const ROLES = {
-  IMPOSTOR: 'impostor',
-  CREW: 'crew'
-}
+export const PLAYERS = 'players'
+export const IMPOSTORS = 'impostors'

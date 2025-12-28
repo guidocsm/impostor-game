@@ -5,7 +5,7 @@ import { Crew } from "../components/game/Crew";
 import { Impostor } from "../components/game/Impostor";
 
 import '../css/pages/game.css';
-import { ROLES } from "../utils/constants";
+import { IMPOSTORS, PLAYERS } from "../utils/constants";
 
 export default function Game() {
   const [playerSession, setPlayerSession] = useState(null)
@@ -38,8 +38,14 @@ export default function Game() {
 
   return (
     <div>
-      {playerSession?.role === ROLES.CREW && <Crew playerSession={playerSession} />}
-      {playerSession?.role === ROLES.IMPOSTOR && <Impostor playerSession={playerSession} />}
+      {playerSession?.role === PLAYERS && <Crew playerSession={playerSession} />}
+      {playerSession?.role === IMPOSTORS && <Impostor playerSession={playerSession} />}
+      <div className="players-order">
+        <span className="players-order-title">Orden de la ronda:</span>
+        {playerSession?.players.map((player, i) => (
+          <span className={`${player?.id === playerSession?.player_id ? 'current-player' : 'rest-player'}`} key={player?.id}>({i + 1}) {player?.name}</span>
+        ))}
+      </div>
       <span
         className="back-home"
         onClick={() => navigate('/')}

@@ -1,46 +1,6 @@
 @import url('../../colors.css');
 
 .crew-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.crew-container-box {
-  background-color: #6B46C14D;
-  border-radius: 12px;
-  border: 1px solid var(--color-main);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  padding: 30px 20px;
-}
-
-.crew-container-box span {
-  color: var(--color-main);
-  text-transform: uppercase;
-  font-weight: 600;
-  font-size: 24px;
-}
-
-.crew-container-box p {
-  color: var(--color-gray);
-  text-align: center;
-}
-
-.crew-icon {
-  background-color: #6B46C14D;
-  border-radius: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-  width: 50px;
-}
-
-.crew-container-secret-word {
-  /* background-color: var(--color-gray); */
   background-color: #fff;
   box-shadow: var(--shadow-color);
   border-radius: 12px;
@@ -50,6 +10,24 @@
   align-items: center;
   padding: 20px;
   gap: 10px;
+}
+
+.crew-container-category {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 14px;
+}
+
+.crew-container-secret-word {
+  color: var(--color-main);
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.crew-container-description {
+  color: #B3B0C4;
+  font-size: 14px;
+  text-align: center;
 }
 
 .crew-container-secret-word-text {

@@ -11,7 +11,7 @@ import { getRandomNumber } from "../../utils/methods"
 import { deletePlayer } from "../../services/deletePlayer"
 import { supabase } from "../../services/supabaseClient"
 import { useRoomListener } from "./useRoomListener"
-import { ROLES } from "../../utils/constants"
+import { IMPOSTORS, PLAYERS } from "../../utils/constants"
 
 export function useRoomGame() {
   const [room, setRoom] = useState(null)
@@ -81,15 +81,21 @@ export function useRoomGame() {
     try {
       const category = await getCategory({ categoryId: room?.category?.id })
       const randomPlayerIndex = getRandomNumber(players.length)
-      const randomCategoryIndex = getRandomNumber(category.options.length)
+      // const randomCategoryIndex = getRandomNumber(category.options.length)
 
-      const gameSessionList = players.map((player, playerIndex) => ({
+      const impostorId = players[randomPlayerIndex].id
+      const randomCategoryIndex = getRandomNumber(category.options.length)
+      const shuffledPlayers = shuffleArray(players)
+
+      const gameSessionList = shuffledPlayers.map((player) => ({
         player_id: player.id,
         player_name: player.name,
-        role: playerIndex === randomPlayerIndex ? ROLES.IMPOSTOR : ROLES.CREW,
+        role: player?.id === impostorId ? IMPOSTORS : PLAYERS,
         word: category.options[randomCategoryIndex],
         is_host: player.id === players[0].id,
         room_id: roomId,
+        category: room?.category?.name,
+        players: shuffledPlayers.map(player => ({ id: player?.id, name: player?.name })),
       }))
 
       await createGameSession(gameSessionList)
@@ -112,6 +118,15 @@ export function useRoomGame() {
     } catch (error) {
       console.log('error', error)
     }
+  }
+
+  const shuffleArray = (array) => {
+    const shuffled = [...array]
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
+    return shuffled
   }
 
   const pendingPlayers = Array

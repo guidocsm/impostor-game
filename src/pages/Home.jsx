@@ -11,7 +11,7 @@ export default function Home() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <>
+    <div className="home">
       <section className="home-btn">
         <Button
           text="Crear una sala"
@@ -19,11 +19,12 @@ export default function Home() {
           onClick={() => navigate('/crear-partida')}
         />
         <Button
-          text="Unirme a una sala"
+          text="Unirse a una sala"
           type="main-hover"
           onClick={() => navigate('/unirse')}
         />
       </section>
+      <p className="home-description-game">Encuentra al impostor entre los jugadores</p>
       <div onClick={() => setIsOpen(true)} className="instructions">
         <QuestionIcon />
         <span>Instrucciones</span>
@@ -34,6 +35,6 @@ export default function Home() {
       >
         <Intructions setIsOpen={setIsOpen} />
       </Modal>
-    </>
+    </div>
   )
 }

@@ -27,14 +27,10 @@
   padding: 10px 15px;
 }
 
-.new-game-box-counter div {
-  background-color: var(--color-main);
-  border-radius: 8px;
+.total-players-container {
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 35px;
-  width: 35px;
+  gap: 4px;
 }
 
 .total-players {
@@ -75,12 +71,13 @@
   transition: background-color .3s ease-in-out, border-color .3s ease-in-out;
   color: #fff;
   border: 1px solid var(--color-main);
-}
-
-.remove-player:hover, .add-player:hover {
-  border: 1px solid var(--color-main);
-  background-color: transparent;
-  color: var(--color-main)
+  background-color: var(--color-main);
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 35px;
+  width: 35px;
 }
 
 .selected-category {
@@ -94,4 +91,15 @@
   height: 45px;
   padding-left: 15px;
   font-weight: 400;
+}
+
+.new-game-create {
+  display: flex;
+  justify-content: center;
+}
+
+.impostor-difficulty {
+  font-size: 14px;
+  color: var(--color-dark-light);
+  font-weight: 300;
 }

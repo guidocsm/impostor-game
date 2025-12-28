@@ -27,5 +27,5 @@ export const CATEGORIES = {
 
 export const ROLES = {
   IMPOSTOR: 'impostor',
-  CREW: 'tripulante'
+  CREW: 'crew'
 }

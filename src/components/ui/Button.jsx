@@ -4,6 +4,7 @@ export function Button({
   text = '',
   type = 'main',
   disabled = false,
+  maxWidth = 220,
   onClick
 }) {
   const btnClassByType = {
@@ -17,6 +18,7 @@ export function Button({
       className={`btn ${btnClassByType[type] ?? ''} ${disabled ? 'disabled' : ''}`}
       disabled={disabled}
       onClick={onClick}
+      style={{ maxWidth }}
     >
       {text}
     </button>

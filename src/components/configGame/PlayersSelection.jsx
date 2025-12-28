@@ -1,3 +1,6 @@
+import { AddIcon, RemoveIcon } from "../../../public/icons/Icons";
+import { ROLES } from "../../utils/constants";
+
 export function PlayersSelection({
   label = '',
   players = 0,
@@ -14,14 +17,16 @@ export function PlayersSelection({
           className={`remove-player ${className}`}
           onClick={() => removePlayer(sectionKey)}
         >
-          -
+          <RemoveIcon />
         </div>
-        <span className="total-players">{players}</span>
+        <div className="total-players-container">
+          <span className="total-players">{players}</span>
+        </div>
         <div
           className="add-player"
           onClick={() => addPlayer(sectionKey)}
         >
-          +
+          <AddIcon />
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import '../css/pages/newGame.css'
 import { PlayersSelection } from "../components/configGame/PlayersSelection";
 import { CategoryCard } from "../components/configGame/CategoryCard";
 import { useConfigGame } from "../hooks/configGame/useConfigGame";
+import { ROLES } from "../utils/constants";
 
 export default function NewGame() {
   const {
@@ -16,27 +17,27 @@ export default function NewGame() {
     onChangePlayerName
   } = useConfigGame()
 
-  const { crew, impostors, category: currentCategory } = configGame
+  const { crew, impostor, category: currentCategory } = configGame
 
   return (
     <>
       <Title
-        text="Crear partida"
+        text="Configura tu partida"
       />
       <section className="new-game">
         <PlayersSelection
-          label="Tripulantes"
+          label="Jugadores"
           players={crew}
           className={crew === 3 ? 'disabled' : ''}
-          sectionKey="crew"
+          sectionKey={ROLES.CREW}
           addPlayer={addPlayer}
           removePlayer={removePlayer}
         />
         <PlayersSelection
           label="Impostores"
-          players={impostors}
-          className={impostors === 1 ? 'disabled' : ''}
-          sectionKey="impostors"
+          players={impostor}
+          className={impostor === 1 ? 'disabled' : ''}
+          sectionKey={ROLES.IMPOSTOR}
           addPlayer={addPlayer}
           removePlayer={removePlayer}
         />
@@ -60,11 +61,13 @@ export default function NewGame() {
             onChange={({ target }) => onChangePlayerName(target.value)}
           />
         </div>
-        <Button
-          text="Crear partida"
-          onClick={() => setNewRoom(configGame)}
-          disabled={configGame.category === null}
-        />
+        <div className="new-game-create">
+          <Button
+            text="Crear partida"
+            onClick={() => setNewRoom(configGame)}
+            disabled={configGame.category === null}
+          />
+        </div>
       </section>
     </>
   )

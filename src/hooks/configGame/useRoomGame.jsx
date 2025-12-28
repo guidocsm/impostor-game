@@ -11,6 +11,7 @@ import { getRandomNumber } from "../../utils/methods"
 import { deletePlayer } from "../../services/deletePlayer"
 import { supabase } from "../../services/supabaseClient"
 import { useRoomListener } from "./useRoomListener"
+import { ROLES } from "../../utils/constants"
 
 export function useRoomGame() {
   const [room, setRoom] = useState(null)
@@ -85,7 +86,7 @@ export function useRoomGame() {
       const gameSessionList = players.map((player, playerIndex) => ({
         player_id: player.id,
         player_name: player.name,
-        role: playerIndex === randomPlayerIndex ? 'impostor' : 'tripulante',
+        role: playerIndex === randomPlayerIndex ? ROLES.IMPOSTOR : ROLES.CREW,
         word: category.options[randomCategoryIndex],
         is_host: player.id === players[0].id,
         room_id: roomId,

@@ -9,6 +9,8 @@
 
 .join-room-cta {
   margin-top: 40px;
+  display: flex;
+  justify-content: center;
 }
 
 .join-room-cta button {
@@ -23,7 +25,7 @@
 }
 
 .join-room-back {
-  color: var(--color-main);
+  color: var(--color-gray);
   cursor: pointer;
   display: block;
   text-decoration: underline;

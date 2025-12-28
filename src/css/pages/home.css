@@ -1,10 +1,17 @@
 @import url('../colors.css');
 
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
 .home-btn {
   display: flex;
   flex-direction: column;
   gap: 10px;
   justify-content: center;
+  align-items: center;
 }
 
 .instructions {
@@ -13,9 +20,15 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  margin-top: 50px;
+  font-size: 14px;
 }
 
 .instructions span {
+  color: var(--color-gray)
+}
+
+.home-description-game {
+  font-size: 14px;
+  text-align: center;
   color: var(--color-gray)
 }

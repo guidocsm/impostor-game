@@ -3,22 +3,22 @@ import { createRoom } from "../../services/createRoom"
 import { useNavigate } from "react-router-dom"
 import { createPlayer } from "../../services/createPlayer"
 import { supabase } from "../../services/supabaseClient"
+import { ROLES } from "../../utils/constants"
 
 export function useConfigGame() {
+  const [categories, setCategories] = useState([])
   const [configGame, setConfigGame] = useState({
     crew: 3,
-    impostors: 1,
+    impostor: 1,
     category: null,
     hostPlayerName: ''
   })
 
   const navigate = useNavigate()
 
-  const [categories, setCategories] = useState([])
-
   useEffect(() => {
     (async () => {
-      const { data: categoriesList, error } = await supabase
+      const { data: categoriesList } = await supabase
         .from('categories')
         .select('name, id');
       setCategories(categoriesList)
@@ -43,8 +43,8 @@ export function useConfigGame() {
 
   const checkMinimumPlayers = (key) => {
     return (
-      key === 'crew' && configGame.crew === 3 ||
-      key === 'impostors' && configGame.impostors === 1
+      key === ROLES.CREW && configGame.crew === 3 ||
+      key === ROLES.IMPOSTOR && configGame.impostor === 1
     )
   }
 

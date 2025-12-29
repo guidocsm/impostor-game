@@ -18,7 +18,6 @@ export function useStartedGameListener() {
           filter: `id=eq.${roomId}`
         },
         (payload) => {
-
           if (payload.new?.status === 'started') {
             navigate(`/partida/${roomId}`);
           }

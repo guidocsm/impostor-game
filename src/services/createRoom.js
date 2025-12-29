@@ -16,12 +16,11 @@ export const createRoom = async (payload) => {
     const response = await supabase
     .from('rooms')
     .insert([{
-      crewCount: payload.players - payload.impostors,
+      players: payload.players,
       impostorsCount: payload.impostors,
       category: payload.category,
       hostPlayerId: playerId,
       code: generateRoomCode(),
-      totalPlayers: payload.players
     }])
     .select()
 

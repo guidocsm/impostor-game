@@ -15,6 +15,8 @@ export default function Room() {
     deletePlayerAndUpdatePlayers
   } = useRoomGame()
 
+  const playersInLobby = players.every(player => player?.inLobby)
+
   return (
     <>
       <div className="room-header">
@@ -29,15 +31,18 @@ export default function Room() {
         isHosting={isHosting}
       />
       <div className="room-game-config">
-        {isHosting && (
+        {isHosting && players.length === room?.players && playersInLobby && (
           <Button
             text="Iniciar partida"
-            disabled={players?.length < room?.totalPlayers}
+            disabled={players?.length < room?.players}
             onClick={startGame}
           />
         )}
-        {!isHosting && players.length === room?.totalPlayers && (
+        {!isHosting && players.length === room?.players && playersInLobby && (
           <p className="ready-message">Todo listo. Esperando que el anfitrión empiece la partida.</p>
+        )}
+        {!isHosting && players.length === room?.players && !playersInLobby && (
+          <p className="ready-message">Esperando que los jugadores se unan a la sala</p>
         )}
         <Button
           text="Salir de la sala"

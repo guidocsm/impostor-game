@@ -132,6 +132,7 @@
 .ready-message {
   color: var(--color-main);
   font-weight: 500;
+  text-align: left;
 }
 
 .room-code-success-copy {

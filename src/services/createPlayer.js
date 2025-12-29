@@ -1,20 +1,18 @@
 import { supabase } from "./supabaseClient"
-import { v4 as uuidv4 } from 'uuid'
 
 export const createPlayer = async (payload) => {
   try {
     const { data: { user }, error: authError } = await supabase.auth.signInAnonymously()
     if (authError) throw authError
 
-    const playerId = payload?.hostPlayerId ?? uuidv4()
+    const playerId = payload?.hostPlayerId ?? user?.id
 
-    const response = await supabase
+    await supabase
     .from('players')
     .insert([{
       name: payload.name,
       id: playerId,
       roomId: payload.id || payload?.roomId,
-      userId: user?.id
     }])
 
     localStorage.setItem('playerId', JSON.stringify(playerId))

@@ -5,7 +5,7 @@ import { fetchPlayers } from "../../services/fetch/fetchPlayers"
 import { createPlayer } from "../../services/createPlayer"
 import { useRoomPresence } from "./useRoomPresence"
 import { getCategory } from "../../services/getCategory"
-import { createGameSession } from "../../services/createGameSession"
+import { updateGameSession } from "../../services/updateGameSession"
 import { setRoomStatus } from "../../services/setRoomStatus"
 import { getRandomNumber } from "../../utils/methods"
 import { deletePlayer } from "../../services/deletePlayer"
@@ -59,6 +59,7 @@ export function useRoomGame() {
 
         await createPlayer({ name: state?.playerAccessInfo?.name, id: roomData?.id })
         playersData = await fetchPlayers(roomId)
+        console.log('playersData', playersData)
         setPlayers(playersData)
       }
 
@@ -72,33 +73,65 @@ export function useRoomGame() {
   }, [roomId])
 
   useEffect(() => {
-    if (room?.status === 'started') {
-      navigate(`/partida/${roomId}`);
+    (async () => {
+      await supabase
+        .from('players')
+        .update({ inLobby: true })
+        .eq('id', playerId)
+    })()
+
+    const channel = supabase.channel(`room-${roomId}`)
+    channel.on('postgres_changes', {
+      event: 'UPDATE',
+      schema: 'public',
+      table: 'players',
+      filter: `roomId=eq.${roomId}`
+    },
+      (payload) => {
+        const updatedPlayer = payload.new;
+        setPlayers(prev =>
+          prev.map(p => (p.id === updatedPlayer.id ? updatedPlayer : p))
+        )
+      }
+    );
+
+    channel.subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
     }
-  }, [room, roomId, navigate]);
+  }, [roomId])
+
+  console.log('players', players)
+
+  useEffect(() => {
+    if (room?.status === 'started') {
+      navigate(`/partida/${roomId}`)
+    }
+  }, [room, roomId, navigate])
 
   const startGame = async () => {
     try {
       const category = await getCategory({ categoryId: room?.category?.id })
       const randomPlayerIndex = getRandomNumber(players.length)
-      // const randomCategoryIndex = getRandomNumber(category.options.length)
 
       const impostorId = players[randomPlayerIndex].id
       const randomCategoryIndex = getRandomNumber(category.options.length)
       const shuffledPlayers = shuffleArray(players)
 
-      const gameSessionList = shuffledPlayers.map((player) => ({
-        player_id: player.id,
-        player_name: player.name,
-        role: player?.id === impostorId ? IMPOSTORS : PLAYERS,
+      const gameSession = {
         word: category.options[randomCategoryIndex],
-        is_host: player.id === players[0].id,
-        room_id: roomId,
+        roomId: roomId,
         category: room?.category?.name,
-        players: shuffledPlayers.map(player => ({ id: player?.id, name: player?.name })),
-      }))
+        players: shuffledPlayers.map(player => ({
+          id: player?.id,
+          name: player?.name,
+          role: player?.id === impostorId ? IMPOSTORS : PLAYERS,
+          isHost: player.id === players[0].id,
+        }))
+      }
 
-      await createGameSession(gameSessionList)
+      await updateGameSession(gameSession)
       await setRoomStatus('started')
 
       navigate(`/partida/${roomId}`);
@@ -130,7 +163,7 @@ export function useRoomGame() {
   }
 
   const pendingPlayers = Array
-    .from({ length: room?.totalPlayers - players?.length })
+    .from({ length: room?.players - players?.length })
     .map(x => ({ placeholder: 'Esperando jugador' }))
 
   return {

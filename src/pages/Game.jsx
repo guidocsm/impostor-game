@@ -6,25 +6,32 @@ import { Impostor } from "../components/game/Impostor";
 
 import '../css/pages/game.css';
 import { IMPOSTORS, PLAYERS } from "../utils/constants";
+import { Button } from "../components/ui/Button";
+import { setRoomStatus } from "../services/setRoomStatus";
 
 export default function Game() {
   const [playerSession, setPlayerSession] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const playerId = JSON.parse(localStorage.getItem('playerId'))
 
   const navigate = useNavigate()
   const { roomId } = useParams()
 
   useEffect(() => {
     (async () => {
-      const playerId = JSON.parse(localStorage.getItem('playerId'))
       if (!playerId) {
         navigate('/')
       }
 
+      await supabase
+        .from('players')
+        .update({ inLobby: false })
+        .eq('id', playerId)
+
       const { data, error } = await supabase
         .from('game_sessions')
         .select('*')
-        .eq('room_id', roomId)
-        .eq('player_id', playerId)
+        .eq('roomId', roomId)
         .single()
 
       if (error) {
@@ -36,22 +43,38 @@ export default function Game() {
     })()
   }, [roomId])
 
+  const backToLobby = async () => {
+    setIsLoading(true)
+    await setRoomStatus('waiting')
+    setIsLoading(false)
+    navigate(`/sala/${roomId}`)
+  }
+
+  const currentPlayer = playerSession?.players.find(player => player?.id === playerId)
+
   return (
-    <div>
-      {playerSession?.role === PLAYERS && <Crew playerSession={playerSession} />}
-      {playerSession?.role === IMPOSTORS && <Impostor playerSession={playerSession} />}
+    <main>
+      {currentPlayer?.role === PLAYERS && <Crew playerSession={playerSession} />}
+      {currentPlayer?.role === IMPOSTORS && <Impostor playerSession={playerSession} />}
       <div className="players-order">
         <span className="players-order-title">Orden de la ronda:</span>
         {playerSession?.players.map((player, i) => (
-          <span className={`${player?.id === playerSession?.player_id ? 'current-player' : 'rest-player'}`} key={player?.id}>({i + 1}) {player?.name}</span>
+          <span className={`${player?.id === playerId ? 'current-player' : 'rest-player'}`} key={player?.id}>({i + 1}) {player?.name}</span>
         ))}
       </div>
-      <span
-        className="back-home"
-        onClick={() => navigate('/')}
-      >
-        Volver al inicio
-      </span>
-    </div>
+      <section className="game-cta">
+        <Button
+          text="Volver a la sala"
+          onClick={backToLobby}
+          disabled={isLoading}
+        />
+        <span
+          className="back-home"
+          onClick={() => navigate('/')}
+        >
+          Salir
+        </span>
+      </section>
+    </main>
   );
 }

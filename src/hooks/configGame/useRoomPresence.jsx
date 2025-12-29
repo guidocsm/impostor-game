@@ -55,7 +55,7 @@ export function useRoomPresence(isHosting, setPlayers) {
     // 🔹 Subscribe y track
     channel.subscribe(async (status) => {
       if (status === 'SUBSCRIBED') {
-        await channel.track({ playerId, userId: playerId });
+        await channel.track({ playerId, id: playerId });
         await syncPlayers(); // fetch inicial al subscribirse
       }
     });

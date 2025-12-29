@@ -1,4 +1,3 @@
-import { DotIcon } from "../../public/icons/Icons";
 import { Title } from "../components/ui/Title";
 import { Button } from "../components/ui/Button";
 import { useRoomGame } from "../hooks/configGame/useRoomGame";

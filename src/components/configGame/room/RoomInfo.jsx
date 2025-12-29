@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CopyIcon, CrownIcon } from "../../../../public/icons/Icons";
 import { CATEGORIES } from "../../../utils/constants";
 
-export function RoomInfo({ isHosting, room, pendingPlayers, players }) {
+export function RoomInfo({ room, pendingPlayers, players, isHosting }) {
   const [copiedText, setCopiedText] = useState('')
 
   const handleCopy = async () => {
@@ -15,7 +15,8 @@ export function RoomInfo({ isHosting, room, pendingPlayers, players }) {
     } catch (err) {
       console.error("Error al copiar: ", err)
     }
-  };
+  }
+
   return (
     <>
       {isHosting &&
@@ -46,14 +47,20 @@ export function RoomInfo({ isHosting, room, pendingPlayers, players }) {
         <div className="room-game-players">
           {players?.map((player, i) => (
             <div className="room-game-player-name" style={{ opacity: player?.inLobby ? 1 : .5 }} key={player.id}>
-              <span>{player?.name || `Jugador ${i + 1}`}</span>
-              {player.id === room?.hostPlayerId && <CrownIcon />}
+              <>
+                {player?.inLobby
+                  ? <span>{player?.name || `Jugador ${i + 1}`}</span>
+                  : <span className="pending-status">Esperando a {player?.name || `Jugador ${i + 1}`}</span>
+                }
+                {/* <span>{player?.name || `Jugador ${i + 1}`}</span> */}
+                {player.id === room?.hostPlayerId && <CrownIcon />}
+              </>
+
             </div>
           ))}
           {pendingPlayers?.length > 0 && pendingPlayers.map((pendingPlayer, i) => (
             <span
               className="room-game-player-name pending-status"
-              // style={{ opacity: .5 }}
               key={i}
             >
               {pendingPlayer.placeholder}

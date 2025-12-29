@@ -21,6 +21,7 @@ export default function Game() {
     (async () => {
       if (!playerId) {
         navigate('/')
+        return
       }
 
       await supabase

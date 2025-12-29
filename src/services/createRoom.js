@@ -1,5 +1,4 @@
 import { supabase } from "./supabaseClient"
-import { v4 as uuidv4 } from 'uuid'
 
 export const createRoom = async (payload) => {
   function generateRoomCode() {
@@ -12,19 +11,24 @@ export const createRoom = async (payload) => {
   }
 
   try {
-    const playerId = uuidv4()
+    // Crear usuario anónimo primero para obtener el auth.uid()
+    const { data: { user }, error: authError } = await supabase.auth.signInAnonymously()
+    if (authError) throw authError
+
+    const hostPlayerId = user.id // Usar el ID de auth
+
     const response = await supabase
     .from('rooms')
     .insert([{
       players: payload.players,
       impostorsCount: payload.impostors,
       category: payload.category,
-      hostPlayerId: playerId,
+      hostPlayerId: hostPlayerId,
       code: generateRoomCode(),
     }])
     .select()
 
-    return response
+    return { ...response, hostPlayerId }
   } catch (error) {
     return error
   }

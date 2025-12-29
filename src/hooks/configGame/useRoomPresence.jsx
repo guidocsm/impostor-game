@@ -1,76 +1,66 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { supabase } from "../../services/supabaseClient";
 import { useParams } from "react-router-dom";
 import { fetchPlayers } from "../../services/fetch/fetchPlayers";
 
-export function useRoomPresence(isHosting, setPlayers) {
+export function useRoomPresence(setPlayers) {
   const { roomId } = useParams();
   const playerId = JSON.parse(localStorage.getItem('playerId'));
+  const lastFetchRef = useRef(0);
 
   useEffect(() => {
     if (!roomId || !playerId) return
 
-    (async () => {
-      await supabase.rpc('set_config', {
-        key: 'request.headers',
-        value: JSON.stringify({ 'x-player-id': playerId })
-      })
-    })()
+      ; (async () => {
+        await supabase.rpc('set_config', {
+          key: 'request.headers',
+          value: JSON.stringify({ 'x-player-id': playerId })
+        })
+      })()
 
     const channel = supabase.channel(`room:${roomId}`, {
       config: { presence: { key: playerId } }
     });
 
-    // 🔹 Función para actualizar online/offline
-    const updateOnline = (presenceState, currentPlayers) => {
-      const presenceIds = Object.values(presenceState).flat().map(p => p.playerId);
-      return currentPlayers.map(player => ({
+    // Refetch players con debounce (máx 1 vez cada 500ms)
+    const refetchPlayers = async () => {
+      const now = Date.now()
+      if (now - lastFetchRef.current < 500) return
+      lastFetchRef.current = now
+
+      const playersData = await fetchPlayers(roomId)
+      const presenceState = channel.presenceState()
+      const presenceIds = Object.values(presenceState).flat().map(p => p.playerId)
+
+      setPlayers(playersData.map(player => ({
         ...player,
-        online: presenceIds.includes(player.id),
-      }));
-    };
+        online: presenceIds.includes(player.id)
+      })))
+    }
 
-    // 🔹 Fetch y sincronización completa de players
-    const syncPlayers = async () => {
-      try {
-        const presenceState = channel.presenceState();
-        const playersData = await fetchPlayers(roomId);
+    // Cuando alguien se une o sale, refetch para obtener inLobby actualizado
+    // Delay para dar tiempo a que el jugador actualice su inLobby
+    channel.on('presence', { event: 'join' }, () => setTimeout(refetchPlayers, 300))
+    channel.on('presence', { event: 'leave' }, refetchPlayers)
 
-        // Evitamos duplicados: usamos player.id
-        const uniquePlayers = playersData.filter(
-          (p, index, self) => index === self.findIndex(x => x.id === p.id)
-        );
-
-        setPlayers(updateOnline(presenceState, uniquePlayers));
-      } catch (err) {
-        console.error('Error syncing players:', err);
-      }
-    };
-
-    // 🔹 Eventos Presence
-    channel.on('presence', { event: 'join' }, syncPlayers);
-    channel.on('presence', { event: 'leave' }, syncPlayers);
-    channel.on('presence', { event: 'sync' }, syncPlayers);
-
-    // 🔹 Subscribe y track
+    // Subscribe y track
     channel.subscribe(async (status) => {
       if (status === 'SUBSCRIBED') {
-        await channel.track({ playerId, id: playerId });
-        await syncPlayers(); // fetch inicial al subscribirse
+        await channel.track({ playerId, id: playerId })
       }
     });
 
-    // 🔹 Refetch automático al volver a la pestaña
-    const handleVisibility = async () => {
+    // Refetch al volver a la pestaña
+    const handleVisibility = () => {
       if (!document.hidden) {
-        await syncPlayers();
+        refetchPlayers()
       }
-    };
-    document.addEventListener('visibilitychange', handleVisibility);
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
 
     return () => {
-      channel.unsubscribe();
-      document.removeEventListener('visibilitychange', handleVisibility);
-    };
-  }, [roomId, playerId, isHosting, setPlayers]);
+      channel.unsubscribe()
+      document.removeEventListener('visibilitychange', handleVisibility)
+    }
+  }, [roomId, playerId, setPlayers]);
 }

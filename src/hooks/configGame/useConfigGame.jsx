@@ -66,7 +66,8 @@ export function useConfigGame() {
     const response = await createRoom(configGame)
 
     if (response.status === 201) {
-      setNewPlayerInGame(response.data[0])
+      // Pasar hostPlayerId junto con los datos de la room
+      setNewPlayerInGame({ ...response.data[0], hostPlayerId: response.hostPlayerId })
     } else {
       console.log('error', response)
     }

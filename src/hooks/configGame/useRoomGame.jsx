@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { fetchRoomById } from "../../services/fetch/fetchRoomById"
 import { fetchPlayers } from "../../services/fetch/fetchPlayers"
@@ -23,9 +23,8 @@ export function useRoomGame() {
   const navigate = useNavigate()
 
   const playerId = JSON.parse(localStorage.getItem('playerId'))
-  const isHosting = playerId === room?.hostPlayerId
 
-  useRoomPresence(isHosting, setPlayers)
+  useRoomPresence(setPlayers)
   useRoomListener(roomId, setRoom)
 
   useEffect(() => {
@@ -49,9 +48,7 @@ export function useRoomGame() {
         return
       }
 
-      if (playerExists) {
-        setPlayers(playersData)
-      } else {
+      if (!playerExists) {
         if (!state?.playerAccessInfo?.code || (state?.playerAccessInfo?.code.toUpperCase() !== roomData?.code)) {
           navigate('/unirse', { state: { error: 'Código de acceso inválido.' } })
           return
@@ -59,9 +56,9 @@ export function useRoomGame() {
 
         await createPlayer({ name: state?.playerAccessInfo?.name, id: roomData?.id })
         playersData = await fetchPlayers(roomId)
-        console.log('playersData', playersData)
-        setPlayers(playersData)
       }
+
+      setPlayers(playersData)
 
       if (roomData.status === 'started') {
         navigate(`/partida/${roomId}`)
@@ -73,42 +70,49 @@ export function useRoomGame() {
   }, [roomId])
 
   useEffect(() => {
-    (async () => {
-      await supabase
-        .from('players')
-        .update({ inLobby: true })
-        .eq('id', playerId)
-    })()
+    let mounted = true
+
+      ; (async () => {
+        await supabase
+          .from('players')
+          .update({ inLobby: true })
+          .eq('id', playerId)
+      })()
 
     const channel = supabase.channel(`room-${roomId}`)
+
     channel.on('postgres_changes', {
-      event: 'UPDATE',
+      event: '*',
       schema: 'public',
       table: 'players',
       filter: `roomId=eq.${roomId}`
     },
       (payload) => {
-        const updatedPlayer = payload.new;
-        setPlayers(prev =>
-          prev.map(p => (p.id === updatedPlayer.id ? updatedPlayer : p))
-        )
+        if (!mounted) return
+
+        if (payload.eventType === 'INSERT') {
+          setPlayers(prev => [...prev, payload.new])
+        } else if (payload.eventType === 'UPDATE') {
+          setPlayers(prev =>
+            prev.map(p => (p.id === payload.new.id ? payload.new : p))
+          )
+        } else if (payload.eventType === 'DELETE') {
+          setPlayers(prev => prev.filter(p => p.id !== payload.old.id))
+        }
       }
-    );
-
+    )
     channel.subscribe()
-
     return () => {
+      mounted = false
       supabase.removeChannel(channel)
     }
-  }, [roomId])
-
-  console.log('players', players)
+  }, [roomId, playerId])
 
   useEffect(() => {
     if (room?.status === 'started') {
       navigate(`/partida/${roomId}`)
     }
-  }, [room, roomId, navigate])
+  }, [room])
 
   const startGame = async () => {
     try {
@@ -132,6 +136,7 @@ export function useRoomGame() {
       }
 
       await updateGameSession(gameSession)
+
       await setRoomStatus('started')
 
       navigate(`/partida/${roomId}`);
@@ -164,7 +169,11 @@ export function useRoomGame() {
 
   const pendingPlayers = Array
     .from({ length: room?.players - players?.length })
-    .map(x => ({ placeholder: 'Esperando jugador' }))
+    .map(() => ({ placeholder: 'Esperando jugador' }))
+
+  const isHosting = useMemo(() => (
+    room?.hostPlayerId === playerId
+  ), [room])
 
   return {
     room,

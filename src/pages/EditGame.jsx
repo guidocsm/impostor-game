@@ -7,10 +7,20 @@ import { useConfigGame } from "../hooks/configGame/useConfigGame";
 import { IMPOSTORS, PLAYERS } from "../utils/constants";
 import { useRoomGame } from "../hooks/configGame/useRoomGame";
 import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchPlayers } from "../services/fetch/fetchPlayers";
 
 export default function EditGame() {
-  const { room } = useRoomGame()
+  const { room, isHosting } = useRoomGame()
+  const { roomId } = useParams()
+  const navigate = useNavigate()
+
+  // Redirigir al lobby si no es el host
+  useEffect(() => {
+    if (room && !isHosting) {
+      navigate(`/sala/${roomId}`)
+    }
+  }, [room, isHosting, roomId, navigate])
 
   const {
     configGame,

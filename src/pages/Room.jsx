@@ -25,10 +25,12 @@ export default function Room() {
         <Title
           text="Lobby"
         />
-        <div onClick={() => navigate(`/modificar-partida/${room?.id}`)} className="room-settings-container">
-          <SettingsIcon width={22} height={22} fill="#6B46C1" />
-          <span className="room-settings-text">Configurar partida</span>
-        </div>
+        {isHosting && (
+          <div onClick={() => navigate(`/modificar-partida/${room?.id}`)} className="room-settings-container">
+            <SettingsIcon width={22} height={22} fill="#6B46C1" />
+            <span className="room-settings-text">Configurar partida</span>
+          </div>
+        )}
       </div>
       <RoomInfo
         room={room}

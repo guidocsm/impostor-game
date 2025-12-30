@@ -139,3 +139,15 @@
   color: #6EDFB2;
   font-size: 14px;
 }
+
+.room-settings-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+
+}
+
+.room-settings-text {
+  color: #6B46C1;
+}

@@ -4,7 +4,8 @@ export function PlayersSelection({
   label = '',
   players = 0,
   sectionKey = '',
-  className = '',
+  isMin = false,
+  isMax = false,
   addPlayer,
   removePlayer
 }) {
@@ -13,7 +14,7 @@ export function PlayersSelection({
       <span className="new-game-box-title">{label}</span>
       <div className="new-game-box-counter">
         <div
-          className={`remove-player ${className}`}
+          className={`remove-player ${isMin ? 'disabled' : ''}`}
           onClick={() => removePlayer(sectionKey)}
         >
           <RemoveIcon />
@@ -22,7 +23,7 @@ export function PlayersSelection({
           <span className="total-players">{players}</span>
         </div>
         <div
-          className="add-player"
+          className={`add-player ${isMax ? 'disabled' : ''}`}
           onClick={() => addPlayer(sectionKey)}
         >
           <AddIcon />

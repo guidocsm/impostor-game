@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { createRoom } from "../../services/createRoom"
+import { updateRoom } from "../../services/updateRoom"
 import { useNavigate } from "react-router-dom"
 import { createPlayer } from "../../services/createPlayer"
 import { supabase } from "../../services/supabaseClient"
@@ -25,7 +26,12 @@ export function useConfigGame() {
     })()
   }, [])
 
+  const MAX_PLAYERS = 15
+  const MAX_IMPOSTORS = 3
+
   const addPlayer = (key) => {
+    if (checkMaximumPlayers(key)) return
+
     setConfigGame(prevConfig => ({
       ...prevConfig,
       [key]: prevConfig[key] + 1
@@ -45,6 +51,13 @@ export function useConfigGame() {
     return (
       key === PLAYERS && configGame.players === 3 ||
       key === IMPOSTORS && configGame.impostors === 1
+    )
+  }
+
+  const checkMaximumPlayers = (key) => {
+    return (
+      key === PLAYERS && configGame.players === MAX_PLAYERS ||
+      key === IMPOSTORS && configGame.impostors === MAX_IMPOSTORS
     )
   }
 
@@ -84,13 +97,33 @@ export function useConfigGame() {
     navigate(`/sala/${data?.id}`)
   }
 
+  const updateExistingRoom = async (roomId, hostPlayerId) => {
+    const response = await updateRoom(roomId, configGame)
+
+    if (response.error) {
+      console.log('error', response.error)
+      return
+    }
+
+    await supabase
+      .from('players')
+      .update({ name: configGame.hostPlayerName })
+      .eq('id', hostPlayerId)
+
+    navigate(`/sala/${roomId}`)
+  }
+
   return {
     configGame,
     categories,
     addPlayer,
     removePlayer,
     setCategory,
+    setConfigGame,
     setNewRoom,
+    updateExistingRoom,
     onChangePlayerName,
+    checkMinimumPlayers,
+    checkMaximumPlayers,
   }
 }

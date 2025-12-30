@@ -3,8 +3,11 @@ import { Button } from "../components/ui/Button";
 import { useRoomGame } from "../hooks/configGame/useRoomGame";
 import { RoomInfo } from "../components/configGame/room/RoomInfo";
 import '../css/pages/room.css'
+import { SettingsIcon } from "../../public/icons/Icons";
+import { useNavigate } from "react-router-dom";
 
 export default function Room() {
+  const navigate = useNavigate()
   const {
     room,
     players,
@@ -22,6 +25,10 @@ export default function Room() {
         <Title
           text="Lobby"
         />
+        <div onClick={() => navigate(`/modificar-partida/${room?.id}`)} className="room-settings-container">
+          <SettingsIcon width={22} height={22} fill="#6B46C1" />
+          <span className="room-settings-text">Configurar partida</span>
+        </div>
       </div>
       <RoomInfo
         room={room}

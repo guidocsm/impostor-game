@@ -1,4 +1,11 @@
 import { AddIcon, RemoveIcon } from "../../../public/icons/Icons";
+import { IMPOSTORS } from "../../utils/constants";
+
+const getDifficultyLabel = (impostors) => {
+  if (impostors === 1) return '(fácil)'
+  if (impostors === 2) return '(medio)'
+  return '(difícil)'
+}
 
 export function PlayersSelection({
   label = '',
@@ -21,6 +28,9 @@ export function PlayersSelection({
         </div>
         <div className="total-players-container">
           <span className="total-players">{players}</span>
+          {sectionKey === IMPOSTORS && (
+            <span className="impostor-difficulty">{getDifficultyLabel(players)}</span>
+          )}
         </div>
         <div
           className={`add-player ${isMax ? 'disabled' : ''}`}

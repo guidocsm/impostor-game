@@ -5,7 +5,7 @@ export function Impostor() {
   return (
     <section className="impostor-container-box">
       <div className="impostor-icon">
-        <NinjaIcon width={80} height={80} fill="#DC2928" />
+        <NinjaIcon width={80} height={80} fill="#E61919" />
       </div>
       <span className="impostor-text">Eres el</span>
       <span className="impostor-title">¡Impostor!</span>

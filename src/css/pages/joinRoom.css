@@ -18,18 +18,23 @@
 }
 
 .room-error {
-  color: #DB0916;
+  color: var(--color-main);
   text-align: center;
   margin-top: 40px;
   font-weight: 500;
 }
 
 .join-room-back {
-  color: var(--color-gray);
+  color: var(--color-gray-light);
   cursor: pointer;
   display: block;
   text-decoration: underline;
-  text-underline-offset: 2px;
+  text-underline-offset: 3px;
   text-align: center;
   margin-top: 20px;
+  font-size: 14px;
+}
+
+.join-room-back:hover {
+  color: var(--color-white);
 }

@@ -8,6 +8,7 @@ export function JoinRoomForm({ onChangeCode, onChangeName, setRoomError, navigat
           <label htmlFor="">Código de sala</label>
           <input
             type="text"
+            placeholder="Ingresa el código"
             onChange={({ target }) => onChangeCode(target.value)}
             onFocus={() => setRoomError('')}
           />
@@ -16,6 +17,7 @@ export function JoinRoomForm({ onChangeCode, onChangeName, setRoomError, navigat
           <label htmlFor="">Tu nombre</label>
           <input
             type="text"
+            placeholder="Ingresa tu nombre"
             onChange={({ target }) => onChangeName(target.value)}
             onFocus={() => setRoomError('')}
           />

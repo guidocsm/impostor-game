@@ -17,6 +17,7 @@
 
 .pending-status {
   animation: pulseFade 1.6s infinite ease-in-out;
+  font-style: italic;
 }
 
 @keyframes pulseFade {
@@ -33,6 +34,11 @@
   margin-top: 30px;
 }
 
+.room-code-text {
+  font-size: 14px;
+  color: var(--color-gray-light);
+}
+
 .room-game-field {
   display: flex;
   flex-direction: column;
@@ -41,15 +47,22 @@
 }
 
 .room-code-value {
-  background-color: #fff;
-  box-shadow: var(--shadow-color);
+  background-color: transparent;
+  border: 1px solid var(--color-main);
   border-radius: 12px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 20px;
-  padding: 20px;
+  gap: 12px;
+  padding: 16px 20px;
   width: fit-content;
+}
+
+.room-code-value span {
+  font-weight: 600;
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 8px;
+  color: var(--color-main);
 }
 
 .room-game-field-title {
@@ -59,8 +72,7 @@
 }
 
 .room-category-value {
-  background-color: #fff;
-  box-shadow: var(--shadow-color);
+  background-color: var(--color-dark-card);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -71,34 +83,31 @@
 
 .room-category-value span {
   font-weight: 500;
+  color: var(--color-white);
 }
 
 .room-game-field-text {
-  font-weight: 300;
-}
-
-.room-code-value span {
-  font-weight: 500;
-  font-size: 24px;
-  text-transform: uppercase;
-  letter-spacing: 6px;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--color-gray-light);
 }
 
 .room-modify-game {
-  color: #B3B0C4;
+  color: var(--color-gray);
   font-size: 14px;
   text-decoration: underline;
   text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.room-modify-game:hover {
+  color: var(--color-white);
 }
 
 .room-game-players {
-  background-color: #fff;
-  box-shadow: var(--shadow-color);
-  border-radius: 12px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 20px;
+  gap: 12px;
 }
 
 .room-game-players-counter {
@@ -109,34 +118,36 @@
 }
 
 .room-game-player-name {
-  background-color: #fff;
-  box-shadow: var(--shadow-color);
+  background-color: var(--color-dark-card);
   border-radius: 12px;
-  color: var(--color-dark-light);
-  /* color: red; */
+  color: var(--color-white);
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  height: 45px;
+  height: 50px;
+}
+
+.room-game-player-name span {
+  color: var(--color-white);
 }
 
 .room-game-config {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
   margin-top: 40px;
 }
 
 .ready-message {
   color: var(--color-main);
   font-weight: 500;
-  text-align: left;
+  text-align: center;
 }
 
 .room-code-success-copy {
-  color: #6EDFB2;
+  color: var(--color-white);
   font-size: 14px;
 }
 
@@ -145,9 +156,21 @@
   align-items: center;
   gap: 4px;
   cursor: pointer;
-
 }
 
 .room-settings-text {
-  color: #6B46C1;
+  color: var(--color-main);
+  font-size: 14px;
+}
+
+.back-link {
+  color: var(--color-gray-light);
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.back-link:hover {
+  color: var(--color-white);
 }

@@ -9,18 +9,19 @@
 }
 
 .instructions-list {
-  color: var(--color-gray);
+  color: var(--color-white);
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
 .instruction {
-  color: var(--color-gray);
+  color: var(--color-gray-light);
 }
 
 .intruction-title {
   font-weight: 500;
+  color: var(--color-white);
 }
 
 .intructions-advice {
@@ -35,6 +36,10 @@
   text-decoration: underline;
   display: block;
   text-align: center;
-  text-underline-offset: 2px;
+  text-underline-offset: 3px;
   margin-top: 30px;
+}
+
+.close-intructions:hover {
+  opacity: 0.8;
 }

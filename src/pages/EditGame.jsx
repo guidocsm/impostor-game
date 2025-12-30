@@ -93,9 +93,10 @@ export default function EditGame() {
           </div>
         </div>
         <div className="new-game-box">
-          <span>Tu nombre</span>
+          <span className="new-game-box-title">Tu nombre</span>
           <input
             type="text"
+            placeholder="Ingresa tu nombre"
             onChange={({ target }) => onChangePlayerName(target.value)}
             value={configGame.hostPlayerName}
           />
@@ -106,6 +107,7 @@ export default function EditGame() {
             onClick={() => updateExistingRoom(room?.id, room?.hostPlayerId)}
             disabled={configGame.category === null}
           />
+          <span className="back-link" onClick={() => navigate(`/sala/${roomId}`)}>Volver al lobby</span>
         </div>
       </section>
     </>

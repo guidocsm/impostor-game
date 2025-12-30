@@ -4,7 +4,7 @@
   font-weight: 600;
   font-size: 36px;
   text-align: center;
-  color: #6B46C1;
+  color: var(--color-main);
 }
 
 header {
@@ -16,7 +16,7 @@ header {
 
 header p {
   text-align: center;
-  color: var(--color-dark-light)
+  color: var(--color-gray-light);
 }
 
 .header-logo {
@@ -26,7 +26,7 @@ header p {
   height: 80px;
   width: 100%;
   animation: bounce 3s infinite;
-  animation-timing-function: ease-in-outw;
+  animation-timing-function: ease-in-out;
 }
 
 @keyframes bounce {

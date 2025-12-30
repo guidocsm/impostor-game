@@ -4,14 +4,23 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
+  align-items: center;
+  padding-top: 60px;
 }
 
 .home-btn {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+.home-btn .btn {
+  width: 100%;
+  max-width: 100%;
 }
 
 .instructions {
@@ -19,16 +28,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   font-size: 14px;
+  color: var(--color-gray-light);
+  transition: color 0.2s ease-in-out;
+}
+
+.instructions:hover {
+  color: var(--color-white);
 }
 
 .instructions span {
-  color: var(--color-gray)
+  color: inherit;
 }
 
 .home-description-game {
   font-size: 14px;
   text-align: center;
-  color: var(--color-gray)
+  color: var(--color-gray-light);
+  max-width: 280px;
+  line-height: 1.5;
 }

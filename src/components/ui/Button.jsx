@@ -5,6 +5,7 @@ export function Button({
   type = 'main',
   disabled = false,
   maxWidth = 220,
+  icon = null,
   onClick
 }) {
   const btnClassByType = {
@@ -20,6 +21,7 @@ export function Button({
       onClick={onClick}
       style={{ maxWidth }}
     >
+      {icon && <span className="btn-icon">{icon}</span>}
       {text}
     </button>
   )

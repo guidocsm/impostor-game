@@ -2,22 +2,31 @@
 
 .btn {
   border-radius: 12px;
-  font-weight: 500;
-  font-size: 16px;
-  height: 42px;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  height: 52px;
   min-width: 220px;
+  transition: opacity 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
 }
 
 .main-btn {
-  background-color: #6B46C1;
-  color: #fff;
-  transition: background-color .3s ease-in-out, color .3s ease-in-out;
-}
-
-.main-btn:hover {
-  background-color: transparent;
-  border: 1px solid var(--color-main);
-  color: var(--color-main);
+  background-color: var(--color-main);
+  color: var(--color-white);
 }
 
 .main-hover-btn {
@@ -26,8 +35,13 @@
   color: var(--color-main);
 }
 
+.main-hover-btn:hover {
+  background-color: var(--color-main);
+  color: var(--color-white);
+}
+
 .disabled-hover-btn {
   background-color: transparent;
-  border: 1px solid var(--color-main);
-  color: #B3B0C4;
+  border: 1px solid var(--color-gray);
+  color: var(--color-gray);
 }

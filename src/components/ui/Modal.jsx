@@ -46,7 +46,7 @@ export default function Modal({ isOpen, onClose, children, closeOnOverlayClick =
 const overlayStyle = {
   position: "fixed",
   inset: 0,
-  backgroundColor: "rgba(0, 0, 0, 0.5)",
+  backgroundColor: "rgba(0, 0, 0, 0.7)",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -56,27 +56,13 @@ const overlayStyle = {
 };
 
 const contentStyle = {
-  backgroundColor: '#F7FAFC',
+  backgroundColor: '#1A1A1A',
   borderRadius: "16px",
   padding: "24px",
   maxWidth: "600px",
   width: "90%",
-  boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+  boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
   animation: "scaleIn .18s ease-out",
   maxHeight: 500,
   overflow: 'auto'
 };
-
-/**
- * Animaciones usando @keyframes (añade esto en tu CSS global si prefieres no usar inline styles):
- *
- * @keyframes fadeIn {
- *   from { opacity: 0; }
- *   to { opacity: 1; }
- * }
- *
- * @keyframes scaleIn {
- *   from { transform: scale(0.96); opacity: 0; }
- *   to { transform: scale(1); opacity: 1; }
- * }
- */

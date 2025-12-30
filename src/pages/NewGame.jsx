@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
 import { Title } from "../components/ui/Title";
 import '../css/pages/newGame.css'
@@ -7,6 +8,7 @@ import { useConfigGame } from "../hooks/configGame/useConfigGame";
 import { IMPOSTORS, PLAYERS } from "../utils/constants";
 
 export default function NewGame() {
+  const navigate = useNavigate()
   const {
     configGame,
     categories,
@@ -59,9 +61,10 @@ export default function NewGame() {
           </div>
         </div>
         <div className="new-game-box">
-          <span>Tu nombre</span>
+          <span className="new-game-box-title">Tu nombre</span>
           <input
             type="text"
+            placeholder="Ingresa tu nombre"
             onChange={({ target }) => onChangePlayerName(target.value)}
           />
         </div>
@@ -71,6 +74,7 @@ export default function NewGame() {
             onClick={() => setNewRoom(configGame)}
             disabled={configGame.category === null}
           />
+          <span className="back-link" onClick={() => navigate('/')}>Volver al inicio</span>
         </div>
       </section>
     </>

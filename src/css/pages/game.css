@@ -4,9 +4,14 @@
   cursor: pointer;
   text-decoration: underline;
   display: block;
-  color: var(--color-gray);
+  color: var(--color-gray-light);
   text-align: center;
-  text-underline-offset: 2px;
+  text-underline-offset: 3px;
+  font-size: 14px;
+}
+
+.back-home:hover {
+  color: var(--color-white);
 }
 
 .players-order {
@@ -18,8 +23,7 @@
 }
 
 .players-order-title {
-  color: var(--color-dark);
-  opacity: .5;
+  color: var(--color-gray-light);
 }
 
 .current-player {
@@ -28,8 +32,7 @@
 }
 
 .rest-player {
-  color: var(--color-dark);
-  opacity: .5;;
+  color: var(--color-gray);
 }
 
 .game-cta {

@@ -27,7 +27,7 @@ export default function Room() {
         />
         {isHosting && (
           <div onClick={() => navigate(`/modificar-partida/${room?.id}`)} className="room-settings-container">
-            <SettingsIcon width={22} height={22} fill="#6B46C1" />
+            <SettingsIcon width={22} height={22} fill="#E61919" />
             <span className="room-settings-text">Configurar partida</span>
           </div>
         )}
@@ -39,10 +39,10 @@ export default function Room() {
         isHosting={isHosting}
       />
       <div className="room-game-config">
-        {isHosting && players.length === room?.players && playersInLobby && (
+        {isHosting && (
           <Button
             text="Iniciar partida"
-            disabled={players?.length < room?.players}
+            disabled={players?.length < room?.players || !playersInLobby}
             onClick={startGame}
           />
         )}
@@ -52,11 +52,7 @@ export default function Room() {
         {!isHosting && players.length === room?.players && !playersInLobby && (
           <p className="ready-message">Esperando que los jugadores se unan a la sala</p>
         )}
-        <Button
-          text="Salir de la sala"
-          type="main-hover"
-          onClick={deletePlayerAndUpdatePlayers}
-        />
+        <span className="back-link" onClick={deletePlayerAndUpdatePlayers}>Abandonar sala</span>
       </div>
     </>
   )

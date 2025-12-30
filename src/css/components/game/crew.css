@@ -1,38 +1,39 @@
 @import url('../../colors.css');
 
 .crew-container {
-  background-color: #fff;
-  box-shadow: var(--shadow-color);
+  background-color: var(--color-dark-card);
   border-radius: 12px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px;
-  gap: 10px;
+  padding: 30px 20px;
+  gap: 12px;
 }
 
 .crew-container-category {
   text-transform: uppercase;
   letter-spacing: 2px;
-  font-size: 14px;
+  font-size: 12px;
+  color: var(--color-gray-light);
 }
 
 .crew-container-secret-word {
   color: var(--color-main);
-  font-size: 30px;
-  font-weight: 900;
+  font-size: 28px;
+  font-weight: 700;
 }
 
 .crew-container-description {
-  color: #B3B0C4;
+  color: var(--color-gray);
   font-size: 14px;
   text-align: center;
 }
 
 .crew-container-secret-word-text {
-  color: var(--color-gray);
+  color: var(--color-gray-light);
   text-align: center;
+  font-size: 14px;
 }
 
 .crew-container-secret-word-value {
